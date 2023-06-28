@@ -60,7 +60,7 @@ export default function Home() {
               <p className="stepPara mt-4">To get a quote for your item, Please choose the category of your article.</p>
             </div>
             <div className="threeSec mt-5">
-            <p>Why is my Article Category Invalid?<br />I don't know which category my Article falls under.</p>
+            <p>Why is my Article Category Invalid?<br />I dont know which category my Article falls under.</p>
           </div>
           </div>
         

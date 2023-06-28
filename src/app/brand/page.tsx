@@ -29,7 +29,7 @@ export default function Home() {
               <ul>
                 <li>Tom Tailor</li>
                 <li>Sneaker</li>
-                <li>Levi's</li>
+                <li>Levis</li>
                 <li>Jack & Jones</li>
                 <li>Zara Man</li>
               </ul>
@@ -53,7 +53,7 @@ export default function Home() {
               <p className="stepPara mt-4">To get a quote for your item, Please indicate the Brand of your Item.</p>
             </div>
             <div className="threeSec mt-5">
-            <p>I can't find the brand of my Item</p>
+            <p>I cant find the brand of my Item</p>
             <p>How do I find out what the brand is?</p>
           </div>
           </div>
