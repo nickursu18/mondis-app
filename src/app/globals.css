@@ -19,6 +19,14 @@ body {
 .item {
   margin-top:15px;
 }
+.item2 {
+  margin-top:15px;
+  border: 1px solid #D8D8D8;
+  background-color: #D8D8D8;
+  padding:20px;
+  border-radius:20px;
+  
+}
 .bline {
   border: 1px solid #D8D8D8;
   background-color: #D8D8D8;
@@ -202,8 +210,23 @@ flex-grow: 0;
       font-weight:400;
       font-family: 'Lato', sans-serif;
     }
-.msg:hover {
-  opacity:0.5;
+.brandLink:hover {
+  color:#CD76BA !important;
+}
+.labl {
+  font-size:14px;
+  color:#808080;
+  font-weight:400;
+  font-family: 'Lato', sans-serif;
+}
+.labl2 {
+  font-size:20px;
+  color:#808080;
+  font-weight:600;
+  font-family: 'Lato', sans-serif;
+}
+.href:hover {
+  color:#CD76BA !important;
 }
 .texts {
   /* Rectangle 319 */

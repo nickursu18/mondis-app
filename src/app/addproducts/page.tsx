@@ -1,6 +1,10 @@
+"use client"
 import Image from 'next/image'
-
+import Link from 'next/link';
 export default function Home() {
+  let estimateTotal=0;
+  const cartData=typeof window !== 'undefined' ? JSON.parse("["+localStorage.getItem('items')?.replace("null,","")+"]") : null;
+
   return (
     <main className="flex flex-col items-center justify-between">
 
@@ -8,9 +12,9 @@ export default function Home() {
       <div className="header flex items-center">
         <img src="logo.png" className='logo' />
         <div className="menu">
-          <a href="#" className="pls menu-item active">Recieve an Offer</a>
-          <a href="#" className="menu-item hover:active">Your Parcels</a>
-          <a href="#" className="menu-item">Back to the Store</a>
+        <a href="/" className="pls menu-item active">Recieve an Offer</a>
+          <a href="/parcels" className="menu-item hover:active">Your Parcels</a>
+           <a href="#" className="menu-item">Back to the Store</a>
 
         </div>
 
@@ -30,44 +34,33 @@ export default function Home() {
           
             <br />
             <div className="flex gap-5 text-center items-center">
-              <button className='mbtn' style={{width:"48%"}}>Add More items</button>
-              <button className='mbtn' style={{width:"48%"}}>Complete the Sale</button>
+              <Link href="/" className='mbtn' style={{width:"48%"}}>Add More items</Link>
+              <Link href="/ship" className='mbtn' style={{width:"48%"}}>Complete the Sale</Link>
             </div>
           </div>
           <div className="twoSec">
           <div className="items-start text-left amp2" style={{width:"100%"}}>
           <h1 className="secHead2">Items for Sale</h1>
           <br />
-          <div className='item'>
-            <div className="flex">
-            <img src="trashicon.svg" />
-            <span className='prodname  w-full'>Zara X Collection Jacket </span>
-            <span className='prodname text-right items-right'>$10.25 </span>
+          {cartData?.map((cartItem: any, i: any) => {estimateTotal+=parseInt(cartItem.estimate);return (
+            
+            <div key={i} className='item'>
+              <div className="flex">
+              <img src="trashicon.svg" />
+              <span className='prodname  w-full'>{cartItem.brand+" "+cartItem.subcatname} </span>
+              <span className='prodname text-right items-right'>${cartItem.estimate} </span>
+              </div>
             </div>
-          </div>
+            )})}
 
-          <div className='item'>
-            <div className="flex">
-            <img src="trashicon.svg" />
-            <span className='prodname  w-full'>Zara X Collection Jacket </span>
-            <span className='prodname text-right items-right'>$10.25 </span>
-            </div>
-          </div>
-
-          <div className='item'>
-            <div className="flex">
-            <img src="trashicon.svg" />
-            <span className='prodname  w-full'>Zara X Collection Jacket </span>
-            <span className='prodname text-right items-right'>$10.25 </span>
-            </div>
-          </div>
+         
           <br />
           <hr className='rline' />
           <br />
           <div className='item'>
             <div className="flex">
             <span className='prodname2  w-full text-lg'>You will recieve </span>
-            <span className='prodnamen text-right items-right'>$25.12 </span>
+            <span className='prodnamen text-right items-right'>${estimateTotal} </span>
             </div>
           </div>
 

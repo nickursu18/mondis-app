@@ -1,6 +1,30 @@
+"use client";
 import Image from 'next/image'
 import Link from 'next/link';
+import { useState } from "react";
+import { createClient } from '@supabase/supabase-js';
+import { useRouter, useSearchParams } from 'next/navigation';
 export default function Home() {
+  const [searchString, setSearchString] = useState("");
+  const [brands, setBrands] = useState<any[]>([]);
+  const supabaseUrl: any = 'https://pkrvehrepdgvyksotuyg.supabase.co'
+  const supabaseKey: any = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrcnZlaHJlcGRndnlrc290dXlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODc5NTQ4NTcsImV4cCI6MjAwMzUzMDg1N30.ZLsSjv5GYf82e2pLwOWrcbSH89jwuLedNdTEeqdQsKE"
+  const supabase = createClient(supabaseUrl, supabaseKey);
+  const router = useRouter();
+  const searchParams = useSearchParams()
+
+  const search = searchParams.get('gender');
+  async function getData() {
+
+    const { data: brands } = await supabase
+      .from('brands')
+      .select().eq('is_' + search, true);
+    const amp: any = brands;
+    setBrands(amp);
+  }
+  if (brands.length == 0) {
+    getData();
+  }
   return (
     <main className="flex flex-col items-center justify-between">
 
@@ -8,8 +32,8 @@ export default function Home() {
       <div className="header flex items-center">
         <img src="logo.png" className='logo' />
         <div className="menu">
-          <a href="#" className="pls menu-item active">Recieve an Offer</a>
-          <a href="#" className="menu-item hover:active">Your Parcels</a>
+        <a href="/" className="pls menu-item active">Recieve an Offer</a>
+          <a href="/parcels" className="menu-item hover:active">Your Parcels</a>
           <a href="#" className="menu-item">Back to the Store</a>
 
         </div>
@@ -22,26 +46,25 @@ export default function Home() {
             <h3 className="topH">Choose Your Brand</h3>
             <img src="brands.png" className="genderPhoto" />
             <br /><br />
-            <input type="text" className='texts' placeholder='Search for your Item Brand' />
+            <input type="text" className='texts' onChange={(event) => { setSearchString(event.target.value); console.log(searchString); }} value={searchString} placeholder='Search for your Item Brand' />
             <div className="flex colmm2 mt-5">
-              <Link href="/category" className="items-start text-left msg" style={{width:"70%"}}>
-              <h1 className="secHead2">Our Best Sellers</h1>
-              <ul>
-                <li>Tom Tailor</li>
-                <li>Sneaker</li>
-                <li>Levis</li>
-                <li>Jack & Jones</li>
-                <li>Zara Man</li>
-              </ul>
-              
-              </Link>
-              <div className="items-start text-left msg" style={{width:"100%"}}>
-              <div className="threeSec2 mt-5">
-              <h1 className="secHead3">We Accept for Sale</h1>
-            <p style={{color: "#CD76BA"}}>Calvin Klein, Desigual, Guess, Jack & Jones, Tom Tailor, Zara and another 4000+ brands</p>
-          </div>
+              <div className="items-start text-left msg" style={{ width: "70%" }}>
+                <h1 className="secHead2">Our Best Sellers</h1>
+                <ul>
+                  {brands?.filter(brandn => brandn.brand.toLowerCase().includes(searchString.toLowerCase())).map((brand) => (
+                    <li key={brand.id}><Link className="brandLink" href={"/category?gender="+search+"&brand=" + encodeURIComponent(brand.brand) + "&categories=" + encodeURIComponent(brand.cat_id)}>{brand.brand}</Link></li>
+                  ))}
+
+                </ul>
+
               </div>
-              
+              <div className="items-start text-left msg" style={{ width: "100%" }}>
+                <div className="threeSec2 mt-5">
+                  <h1 className="secHead3">We Accept for Sale</h1>
+                  <p style={{ color: "#CD76BA" }}>Calvin Klein, Desigual, Guess, Jack & Jones, Tom Tailor, Zara and another 4000+ brands</p>
+                </div>
+              </div>
+
             </div>
           </div>
           <div className="twoSec">
@@ -53,11 +76,11 @@ export default function Home() {
               <p className="stepPara mt-4">To get a quote for your item, Please indicate the Brand of your Item.</p>
             </div>
             <div className="threeSec mt-5">
-            <p>I cant find the brand of my Item</p>
-            <p>How do I find out what the brand is?</p>
+              <p>I cant find the brand of my Item</p>
+              <p>How do I find out what the brand is?</p>
+            </div>
           </div>
-          </div>
-        
+
         </div>
       </div>
     </main>

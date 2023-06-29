@@ -1,6 +1,29 @@
+"use client"
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation';
 export default function Home() {
+  const searchParams = useSearchParams()
+  const router = useRouter();
+  
+  const catm:any = searchParams.get('categories');
+ 
+  const productS = {
+    gender: atob(""+searchParams.get('gender')),
+    brand: atob(""+searchParams.get('brand')),
+    categories: atob(""+searchParams.get('categories')),
+    subcat: atob(""+searchParams.get('subcat')),
+    estimate: atob(""+searchParams.get('estimate')),
+    subcatname: atob(""+searchParams.get('subcatname')),
+    
+
+  }
+  function addToCart() {
+    
+    localStorage.setItem('items', localStorage.getItem('items')+","+JSON.stringify(productS));
+    router.push("/addproducts");
+  }
+  //console.log(JSON.parse("["+localStorage.getItem('items')?.replace("null,","")+"]"));
   return (
     <main className="flex flex-col items-center justify-between">
 
@@ -8,8 +31,8 @@ export default function Home() {
       <div className="header flex items-center">
         <img src="logo.png" className='logo' />
         <div className="menu">
-          <a href="#" className="pls menu-item active">Recieve an Offer</a>
-          <a href="#" className="menu-item hover:active">Your Parcels</a>
+        <a href="/" className="pls menu-item active">Recieve an Offer</a>
+          <a href="/parcels" className="menu-item hover:active">Your Parcels</a>
           <a href="#" className="menu-item">Back to the Store</a>
 
         </div>
@@ -23,9 +46,9 @@ export default function Home() {
             <p className='stepPara2'>
             For the Product type 1 you will receive:
             </p>
-            <h2 className="mt-2 bigBold">$10.25</h2>
+            <h2 className="mt-2 bigBold">${productS.estimate}</h2>
             <br />
-            <Link href="/ship" className='mbtn' style={{width: "30%"}}>Add to Sale</Link>
+            <Link href="/addproducts" onClick={() => addToCart()} className='mbtn' style={{width: "30%"}}>Add to Sale</Link>
           </div>
           <div className="twoSec">
           <div className="items-start text-left amp2" style={{width:"100%"}}>
