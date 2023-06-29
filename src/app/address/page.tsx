@@ -17,8 +17,12 @@ export default function Home() {
     let estimateTotal=0;
     let totProds=0;
     let addressData:any=[];
-    const cartData=JSON.parse("["+localStorage.getItem('items')?.replace("null,","")+"]");
+    let cartData:any=[];
+    
     if(localStorage.getItem('address')) {
+        cartData=JSON.parse("["+localStorage.getItem('items')?.replace("null,","")+"]");
+    }
+        if(localStorage.getItem('address')) {
         addressData=JSON.parse("["+localStorage.getItem('address')?.replace("null,","")+"]");
     }
     async function createOrder (address_data:any, cart_data:any) {

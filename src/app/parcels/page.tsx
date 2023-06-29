@@ -11,8 +11,10 @@ export default function Home() {
     const router = useRouter();
     const [nproduct,setnProduct] = useState(0);
     const [amtproduct,setAmtProduct] = useState(0);
-    const orderData=typeof window !== 'undefined' ? JSON.parse("["+localStorage.getItem('orderId')?.replace("null,","")+"]") : null;
-   
+    let orderData:any;
+    if(localStorage.getItem('orderId')) {
+     orderData=typeof window !== 'undefined' ? JSON.parse("["+localStorage.getItem('orderId')?.replace("null,","")+"]") : null;
+    }
     const a=100;
     const b=200;
     const searchParams = useSearchParams();
