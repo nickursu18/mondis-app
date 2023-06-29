@@ -12,9 +12,11 @@ export default function Home() {
     const [nproduct,setnProduct] = useState(0);
     const [amtproduct,setAmtProduct] = useState(0);
     let orderData:any;
+    if (typeof window !== 'undefined') {
     if(localStorage.getItem('orderId')) {
      orderData=typeof window !== 'undefined' ? JSON.parse("["+localStorage.getItem('orderId')?.replace("null,","")+"]") : null;
     }
+}
     const a=100;
     const b=200;
     const searchParams = useSearchParams();
