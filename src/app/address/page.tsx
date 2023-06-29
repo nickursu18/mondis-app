@@ -31,7 +31,7 @@ export default function Home() {
         .from('orders')
         .insert({ address_data: address_data,cart_data: cart_data,nproduct: totProds,amtproduct: estimateTotal,orderId:orderId });
         localStorage.removeItem("items");
-        localStorage.setItem('orderItems', localStorage.getItem('orderId')+","+orderId);
+        localStorage.setItem('orderId', localStorage.getItem('orderId')+","+orderId);
       
         
         router.push("/parcels");
