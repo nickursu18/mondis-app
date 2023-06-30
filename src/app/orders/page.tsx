@@ -80,7 +80,7 @@ export default function Home() {
             </thead>
             <tbody>
             {orders?.map((order:any,i:any) => (
-                <tr>
+                <tr key={i}>
                     <td>{i+1}</td>
                     <td>{order.address_data.name}</td>
                     <td>{order.nproduct}</td>
