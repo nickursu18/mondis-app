@@ -75,13 +75,13 @@ export default function Home() {
           <div className="items-start text-left amp2" style={{width:"100%"}}>
           <h1 className="secHead2">Produse de vânzare</h1>
           <br />
-          {cartData?.map((cartItem: any, i: any) => {totProds++;estimateTotal+=parseInt(cartItem.estimate);return (
+          {cartData?.map((cartItem: any, i: any) => {estimateTotal+=parseInt(cartItem.estimate);return (
             
             <div key={i} className='item'>
               <div className="flex">
               <img src="trashicon.svg" />
-              <span className='prodname  w-full'>{cartItem.brand+" "+cartItem.subcatname} </span>
-              <span className='prodname text-right items-right'>{cartItem.estimate} </span>
+              <span className='prodname  w-full'>{cartItem.gender.toUpperCase()+" "+cartItem.brand.toUpperCase()+" "+cartItem.subcatname} </span>
+              <span className='prodname text-right items-right'>{cartItem.estimate}</span>
               </div>
             </div>
             )})}

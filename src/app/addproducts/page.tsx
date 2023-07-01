@@ -24,7 +24,7 @@ export default function Home() {
         <div className="grid grid-cols-2">
           <div className='items-center text-center'>
            <center>
-           <img src="addprods.svg" />
+           <img src="ati.svg" />
            </center>
             
             <br />
@@ -34,8 +34,8 @@ export default function Home() {
           
             <br />
             <div className="flex gap-5 text-center items-center">
-              <Link href="/" className='mbtn' style={{width:"48%"}}>Add More items</Link>
-              <Link href="/ship" className='mbtn' style={{width:"48%"}}>Complete the Sale</Link>
+              <Link href="/" className='mbtn' style={{width:"48%"}}>Adăugați produse</Link>
+              <Link href="/ship" className='mbtn' style={{width:"48%"}}>Pasul următor </Link>
             </div>
           </div>
           <div className="twoSec">
@@ -47,7 +47,7 @@ export default function Home() {
             <div key={i} className='item'>
               <div className="flex">
               <img src="trashicon.svg" />
-              <span className='prodname  w-full'>{cartItem.brand+" "+cartItem.subcatname} </span>
+              <span className='prodname  w-full'>{cartItem.gender.toUpperCase()+" "+cartItem.brand.toUpperCase()+" "+cartItem.subcatname} </span>
               <span className='prodname text-right items-right'>{cartItem.estimate}</span>
               </div>
             </div>

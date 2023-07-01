@@ -42,21 +42,21 @@ export default function Home() {
       <div className="w-full stepsContainer">
         <div className="grid grid-cols-2">
           <div>
-            <h3 className="topH">Adaugă în listă</h3><br />
+            <h3 className="topH">Estimarea Dvs.</h3><br />
             <p className='stepPara2'>
             Pentru produsul din categoria x,y,z :
             </p>
             <h2 className="mt-2 bigBold">{productS.estimate} lei</h2>
             <br />
-            <Link href="/addproducts" onClick={() => addToCart()} className='mbtn' style={{width: "30%"}}>Add to Sale</Link>
+            <Link href="/addproducts" onClick={() => addToCart()} className='mbtn' style={{width: "40%"}}>Adăugați în listă</Link>
           </div>
           <div className="twoSec">
           <div className="items-start text-left amp2" style={{width:"100%"}}>
           <h1 className="secHead2">Produse de vânzare</h1>
           <br />
-          <img src="plist.svg" />
+          <img src="bbn.svg" />
           <br />
-          <p>Cum îmi voi primi banii?<br />Care sunt criteriile de aprobare?</p>
+          <p><b>Cum îmi voi primi banii?</b><br />În cazul validării estimării indicate, veți primi un gift card pe care îl puteți utiliza Dvs. sau oricine altcineva pe Mondis.ro. <br /><b>Care sunt criteriile de aprobare?</b><br />Pentru a fi validată estimarea, îmbrăcămintea și accesoriile dumneavoastră trebuie să fie curate și să nu prezinte semne de uzură. Acestea trebuie să fie nu aibă pete, găuri, fire scoase sau alte defecte.</p>
           
           </div>
           </div>

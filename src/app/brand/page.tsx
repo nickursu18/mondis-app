@@ -51,10 +51,10 @@ export default function Home() {
               <div className="items-start text-left msg" style={{ width: "70%" }}>
                 <h1 className="secHead2">Cele mai bune vânzări</h1>
                 <ul>
-                  {brands?.filter(brandn => brandn.brand.toLowerCase().includes(searchString.toLowerCase())).map((brand) => (
-                    <li key={brand.id}><Link className="brandLink" href={"/category?gender="+search+"&type=" + encodeURIComponent(brand.type) + "&brand=" + encodeURIComponent(brand.brand) + "&categories=" + encodeURIComponent(brand.cat_id)}>{brand.brand}</Link></li>
+                  {brands?.filter(brandn => brandn.brand.toLowerCase().includes(searchString.toLowerCase())).map((brand:any, i:any) => (
+                    <li style={i>10 ? {display:"none"} : {}} key={brand.id}><Link className="brandLink" href={"/category?gender="+search+"&type=" + encodeURIComponent(brand.type) + "&brand=" + encodeURIComponent(brand.brand) + "&categories=" + encodeURIComponent(brand.cat_id)}>{brand.brand}</Link></li>
                   ))}
-
+                  <li>..</li>
                 </ul>
 
               </div>

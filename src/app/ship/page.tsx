@@ -29,7 +29,7 @@ export default function Home() {
             
             <br />
             <Link href="/address">
-            <img src="slln.svg" className="hov" style={{width: "50%"}} />
+            <img src="parads.svg" className="hov" style={{width: "50%"}} />
             </Link>
           </div>
           <div className="twoSec">
@@ -38,14 +38,14 @@ export default function Home() {
           <br />
           {cartData?.map((cartItem: any, i: any) => {estimateTotal+=parseInt(cartItem.estimate);return (
             
-          <div key={i} className='item'>
-            <div className="flex">
-            <img src="trashicon.svg" />
-            <span className='prodname  w-full'>{cartItem.brand+" "+cartItem.subcatname} </span>
-            <span className='prodname text-right items-right'>{cartItem.estimate}</span>
+            <div key={i} className='item'>
+              <div className="flex">
+              <img src="trashicon.svg" />
+              <span className='prodname  w-full'>{cartItem.gender.toUpperCase()+" "+cartItem.brand.toUpperCase()+" "+cartItem.subcatname} </span>
+              <span className='prodname text-right items-right'>{cartItem.estimate}</span>
+              </div>
             </div>
-          </div>
-          )})}
+            )})}
 
          
           <br />
@@ -54,7 +54,7 @@ export default function Home() {
           <div className='item'>
             <div className="flex">
             <span className='prodname2  w-full text-lg'>Vei primi </span>
-            <span className='prodnamen text-right items-right'>{estimateTotal} </span>
+            <span className='prodnamen text-right items-right'>{estimateTotal}</span>
             </div>
           </div>
 

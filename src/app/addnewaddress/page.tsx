@@ -120,8 +120,8 @@ export default function Home() {
             <div key={i} className='item'>
               <div className="flex">
               <img src="trashicon.svg" />
-              <span className='prodname  w-full'>{cartItem.brand+" "+cartItem.subcatname} </span>
-              <span className='prodname text-right items-right'>{cartItem.estimate} </span>
+              <span className='prodname  w-full'>{cartItem.gender.toUpperCase()+" "+cartItem.brand.toUpperCase()+" "+cartItem.subcatname} </span>
+              <span className='prodname text-right items-right'>{cartItem.estimate}</span>
               </div>
             </div>
             )})}
@@ -133,7 +133,7 @@ export default function Home() {
           <div className='item'>
             <div className="flex">
             <span className='prodname2  w-full text-lg'>Vei primi </span>
-            <span className='prodnamen text-right items-right'>{estimateTotal} </span>
+            <span className='prodnamen text-right items-right'>{estimateTotal}</span>
             </div>
           </div>
 
