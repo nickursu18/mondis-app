@@ -109,7 +109,7 @@ export default function Home() {
                                 <textarea rows={5} value={additional} onChange={(event) => { setAdditional(event.target.value);}} className='texts' style={{width: "100%"}} placeholder=''></textarea>
             
                             </div>
-                        <Link href="/address" onClick={() => addAddress()} className='mbtn mt-5'>Add Address</Link>
+                        <Link href="/address" onClick={() => addAddress()} className='mbtn mt-5'>Salvează adresă</Link>
                     </div>
                     <div className="twoSec">
           <div className="items-start text-left amp2" style={{width:"100%"}}>
