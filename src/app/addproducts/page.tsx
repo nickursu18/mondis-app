@@ -27,15 +27,12 @@ export default function Home() {
            <img src="ati.svg" />
            </center>
             
-            <br />
-            <p className='amp2'>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived.
-            </p>
+          
           
             <br />
             <div className="flex gap-5 text-center items-center">
               <Link href="/" className='mbtn' style={{width:"48%"}}>Adăugați produse</Link>
-              <Link href="/ship" className='mbtn' style={{width:"48%"}}>Pasul următor </Link>
+              <Link href="/address" className='mbtn' style={{width:"48%"}}>Pasul următor </Link>
             </div>
           </div>
           <div className="twoSec">
@@ -48,7 +45,7 @@ export default function Home() {
               <div className="flex">
               <img src="trashicon.svg" />
               <span className='prodname  w-full'>{cartItem.gender.toUpperCase()+" "+cartItem.brand.toUpperCase()+" "+cartItem.subcatname} </span>
-              <span className='prodname text-right items-right'>{cartItem.estimate}</span>
+              <span className='prodname w-20 text-right items-right'>{cartItem.estimate} lei</span>
               </div>
             </div>
             )})}
@@ -59,8 +56,8 @@ export default function Home() {
           <br />
           <div className='item'>
             <div className="flex">
-            <span className='prodname2  w-full text-lg'>Vei primi </span>
-            <span className='prodnamen text-right items-right'>{estimateTotal}</span>
+            <span className='prodname2  w-full text-lg'>Veți primi </span>
+            <span className='prodnamen 2-20 text-right items-right'>{estimateTotal} lei</span>
             </div>
           </div>
 

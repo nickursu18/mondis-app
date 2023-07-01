@@ -39,7 +39,7 @@ export default function Home() {
             <div className="w-full stepsContainer">
                 <div className="grid grid-cols-2">
                     <div className='items-start text-left'>
-                        <h3 className="topH"></h3><br />
+                      
                         {orderData?.map((orderItem: any, i: any) => {return (
             
             <div key={i} className='item2'>
@@ -50,10 +50,16 @@ export default function Home() {
               </div>
             </div>
             )})}
+            {(orderData.length == 0) ? (
+                <div>
+                    <p>Nu aveți nici un colet expediat către Mondis. </p><br />
+                  <Link href="/" className='mbtn mt-5'>Începeți aici</Link>
+                </div>
+            ) : ""}
                         <br />
                     </div>
                     <div className="twoSec">
-                    <img src="app.svg" />
+                    <img src="oomm.svg" />
                 </div>
             </div>
             </div>

@@ -56,7 +56,10 @@ export default function Home() {
           <br />
           <img src="bbn.svg" />
           <br />
-          <p><b>Cum îmi voi primi banii?</b><br />În cazul validării estimării indicate, veți primi un gift card pe care îl puteți utiliza Dvs. sau oricine altcineva pe Mondis.ro. <br /><b>Care sunt criteriile de aprobare?</b><br />Pentru a fi validată estimarea, îmbrăcămintea și accesoriile dumneavoastră trebuie să fie curate și să nu prezinte semne de uzură. Acestea trebuie să fie nu aibă pete, găuri, fire scoase sau alte defecte.</p>
+          <p><b>Cum îmi voi primi banii?</b><br />În cazul validării estimării indicate, veți primi un gift card pe care îl puteți utiliza Dvs. sau oricine altcineva pe Mondis.ro. <br /><b>Care sunt criteriile de aprobare?</b><br />Pentru a fi validată estimarea, îmbrăcămintea și accesoriile dumneavoastră trebuie să fie curate și să nu prezinte semne de uzură. Acestea trebuie să fie nu aibă pete, găuri, fire scoase sau alte defecte.
+          <br /><b>Nu sunteți gată să adăugați acest articol spre vânzare?</b><br />
+<a href="/">Verificați prețul pentru un alt produs</a>
+          </p>
           
           </div>
           </div>

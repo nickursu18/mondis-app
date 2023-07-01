@@ -60,15 +60,14 @@ export default function Home() {
               </div>
               <div className="items-start text-left msg" style={{ width: "100%" }}>
                 <div className="threeSec2 mt-5">
-                  <h1 className="secHead3">Acceptăm pentru vânzări</h1>
-                  <p style={{ color: "#CD76BA" }}>Calvin Klein, Desigual, Guess, Jack & Jones, Tom Tailor, Zara and another 4000+ brands</p>
+                  <h1 className="secHead3">peste 100 de mărci</h1>
                 </div>
               </div>
 
             </div>
           </div>
           <div className="twoSec">
-            <h1 className="secHead">Items Description</h1>
+            <h1 className="secHead">Descrierea Articoluli</h1>
             <img src="step2.svg" className="mt-8" />
             <br />
             <div className="p-5">
