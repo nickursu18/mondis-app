@@ -45,7 +45,7 @@ export default function Home() {
             <div key={i} className='item2'>
               <div className="flex">
               <img src="orangetick.svg" />
-              <span className='prodname w-full'>Order #{i+1} </span>
+              <span className='prodname w-full'>Coletul July 1st (3 articole) </span>
               <span className='prodname text-right items-right'><img src="waiting.svg" /></span>
               </div>
             </div>
@@ -59,7 +59,7 @@ export default function Home() {
                         <br />
                     </div>
                     <div className="twoSec">
-                    <img src="oomm.svg" />
+                    <img src="appg.svg" />
                 </div>
             </div>
             </div>

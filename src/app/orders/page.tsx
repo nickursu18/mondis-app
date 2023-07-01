@@ -49,25 +49,25 @@ export default function Home() {
             <thead>
                 <tr>
                     <th>
-                        Order #
+                    Numărul comenzii
                     </th>
                     <th>
-                        Customer Name
+                    Numele Clientului
                     </th>
                     <th>
-                        No. of Products
+                    Nr. Produse
                     </th>
                     <th>
-                        Net Estimate of Products
+                    Estimarea
                     </th>
                     <th>
-                        Current Status
+                    Statutul Coletului
                     </th>
                     <th>
-                        Final Estimation
+                    Validarea
                     </th>
                     <th>
-                        Gift Card Code
+                        Gift Card
                     </th>
                     <th className="w-full">
                         Products
