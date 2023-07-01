@@ -19,7 +19,7 @@ export default function Home() {
     let addressData:any=[];
     let cartData:any=[];
     
-    if(localStorage.getItem('address')) {
+    if(localStorage.getItem('items')) {
         cartData=JSON.parse("["+localStorage.getItem('items')?.replace("null,","")+"]");
     }
         if(localStorage.getItem('address')) {
