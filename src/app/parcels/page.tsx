@@ -28,11 +28,11 @@ export default function Home() {
             <div className="header flex items-center">
                 <img src="logo.png" className='logo' />
                 <div className="menu">
-                <a href="/" className="pls menu-item active">Recieve an Offer</a>
-          <a href="/parcels" className="menu-item hover:active">Your Parcels</a>
-          <a href="#" className="menu-item">Back to the Store</a>
+          <a href="/" className="pls menu-item active">Primiți o ofertă</a>
+          <a href="/parcels" className="menu-item hover:active">vânzările Dvs.</a>
+          <a href="#" className="menu-item">Înapoi spre magazin</a>
 
-                </div>
+        </div>
 
             </div>
             <hr className="bline w-full" />
@@ -53,7 +53,7 @@ export default function Home() {
                         <br />
                     </div>
                     <div className="twoSec">
-                    <img src="idd.svg" />
+                    <img src="app.svg" />
                 </div>
             </div>
             </div>

@@ -14,9 +14,9 @@ export default function Home() {
       <div className="header flex items-center">
         <img src="logo.png" className='logo' />
         <div className="menu">
-        <a href="/" className="pls menu-item active">Recieve an Offer</a>
-          <a href="/parcels" className="menu-item hover:active">Your Parcels</a>
-          <a href="#" className="menu-item">Back to the Store</a>
+          <a href="/" className="pls menu-item active">Primiți o ofertă</a>
+          <a href="/parcels" className="menu-item hover:active">vânzările Dvs.</a>
+          <a href="#" className="menu-item">Înapoi spre magazin</a>
 
         </div>
 
@@ -25,7 +25,7 @@ export default function Home() {
       <div className="w-full stepsContainer">
         <div className="grid grid-cols-2">
           <div className='items-start text-left'>
-          <h3 className="topH">How will you ship your item?</h3><br />
+          <h3 className="topH">Cum veți expedia produsul dvs.?</h3><br />
             
             <br />
             <Link href="/address">
@@ -34,7 +34,7 @@ export default function Home() {
           </div>
           <div className="twoSec">
           <div className="items-start text-left amp2" style={{width:"100%"}}>
-          <h1 className="secHead2">Items for Sale</h1>
+          <h1 className="secHead2">Produse de vânzare</h1>
           <br />
           {cartData?.map((cartItem: any, i: any) => {estimateTotal+=parseInt(cartItem.estimate);return (
             
@@ -42,7 +42,7 @@ export default function Home() {
             <div className="flex">
             <img src="trashicon.svg" />
             <span className='prodname  w-full'>{cartItem.brand+" "+cartItem.subcatname} </span>
-            <span className='prodname text-right items-right'>${cartItem.estimate} </span>
+            <span className='prodname text-right items-right'>{cartItem.estimate}</span>
             </div>
           </div>
           )})}
@@ -53,12 +53,12 @@ export default function Home() {
           <br />
           <div className='item'>
             <div className="flex">
-            <span className='prodname2  w-full text-lg'>You will recieve </span>
-            <span className='prodnamen text-right items-right'>${estimateTotal} </span>
+            <span className='prodname2  w-full text-lg'>Vei primi </span>
+            <span className='prodnamen text-right items-right'>{estimateTotal} </span>
             </div>
           </div>
 
-          <p className='text-md mt-10'>Sell easier, cheaper and with free shipping to Mondis!</p>
+          <p className='text-md mt-10'>Vindeți mai ușor, mai ieftin și cu transport gratuit către Mondis!</p>
           <br />
           </div>
           </div>

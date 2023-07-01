@@ -31,9 +31,9 @@ export default function Home() {
       <div className="header flex items-center">
         <img src="logo.png" className='logo' />
         <div className="menu">
-        <a href="/" className="pls menu-item active">Recieve an Offer</a>
-          <a href="/parcels" className="menu-item hover:active">Your Parcels</a>
-          <a href="#" className="menu-item">Back to the Store</a>
+          <a href="/" className="pls menu-item active">Primiți o ofertă</a>
+          <a href="/parcels" className="menu-item hover:active">vânzările Dvs.</a>
+          <a href="#" className="menu-item">Înapoi spre magazin</a>
 
         </div>
 
@@ -42,21 +42,21 @@ export default function Home() {
       <div className="w-full stepsContainer">
         <div className="grid grid-cols-2">
           <div>
-            <h3 className="topH">Add to list</h3><br />
+            <h3 className="topH">Adaugă în listă</h3><br />
             <p className='stepPara2'>
-            For the Product type 1 you will receive:
+            Pentru produsul din categoria x,y,z :
             </p>
-            <h2 className="mt-2 bigBold">${productS.estimate}</h2>
+            <h2 className="mt-2 bigBold">{productS.estimate} lei</h2>
             <br />
             <Link href="/addproducts" onClick={() => addToCart()} className='mbtn' style={{width: "30%"}}>Add to Sale</Link>
           </div>
           <div className="twoSec">
           <div className="items-start text-left amp2" style={{width:"100%"}}>
-          <h1 className="secHead2">Items for Sale</h1>
+          <h1 className="secHead2">Produse de vânzare</h1>
           <br />
           <img src="plist.svg" />
           <br />
-          <p>When will I recieve the money?<br />What is the approval criteria.</p>
+          <p>Cum îmi voi primi banii?<br />Care sunt criteriile de aprobare?</p>
           
           </div>
           </div>

@@ -32,9 +32,9 @@ export default function Home() {
       <div className="header flex items-center">
         <img src="logo.png" className='logo' />
         <div className="menu">
-        <a href="/" className="pls menu-item active">Recieve an Offer</a>
-          <a href="/parcels" className="menu-item hover:active">Your Parcels</a>
-          <a href="#" className="menu-item">Back to the Store</a>
+          <a href="/" className="pls menu-item active">Primiți o ofertă</a>
+          <a href="/parcels" className="menu-item hover:active">vânzările Dvs.</a>
+          <a href="#" className="menu-item">Înapoi spre magazin</a>
 
         </div>
 
@@ -43,16 +43,16 @@ export default function Home() {
       <div className="w-full stepsContainer">
         <div className="grid grid-cols-2">
           <div>
-            <h3 className="topH">Choose Your Brand</h3>
+            <h3 className="topH">Alegeți marca</h3>
             <img src="brands.png" className="genderPhoto" />
             <br /><br />
-            <input type="text" className='texts' onChange={(event) => { setSearchString(event.target.value); console.log(searchString); }} value={searchString} placeholder='Search for your Item Brand' />
+            <input type="text" className='texts' onChange={(event) => { setSearchString(event.target.value); console.log(searchString); }} value={searchString} placeholder='Căutați marca' />
             <div className="flex colmm2 mt-5">
               <div className="items-start text-left msg" style={{ width: "70%" }}>
-                <h1 className="secHead2">Our Best Sellers</h1>
+                <h1 className="secHead2">Cele mai bune vânzări</h1>
                 <ul>
                   {brands?.filter(brandn => brandn.brand.toLowerCase().includes(searchString.toLowerCase())).map((brand) => (
-                    <li key={brand.id}><Link className="brandLink" href={"/category?gender="+search+"&brand=" + encodeURIComponent(brand.brand) + "&categories=" + encodeURIComponent(brand.cat_id)}>{brand.brand}</Link></li>
+                    <li key={brand.id}><Link className="brandLink" href={"/category?gender="+search+"&type=" + encodeURIComponent(brand.type) + "&brand=" + encodeURIComponent(brand.brand) + "&categories=" + encodeURIComponent(brand.cat_id)}>{brand.brand}</Link></li>
                   ))}
 
                 </ul>
@@ -60,7 +60,7 @@ export default function Home() {
               </div>
               <div className="items-start text-left msg" style={{ width: "100%" }}>
                 <div className="threeSec2 mt-5">
-                  <h1 className="secHead3">We Accept for Sale</h1>
+                  <h1 className="secHead3">Acceptăm pentru vânzări</h1>
                   <p style={{ color: "#CD76BA" }}>Calvin Klein, Desigual, Guess, Jack & Jones, Tom Tailor, Zara and another 4000+ brands</p>
                 </div>
               </div>
@@ -72,12 +72,13 @@ export default function Home() {
             <img src="step2.svg" className="mt-8" />
             <br />
             <div className="p-5">
-              <span className="stepSmall">Step 2</span>
-              <p className="stepPara mt-4">To get a quote for your item, Please indicate the Brand of your Item.</p>
+              <span className="stepSmall">Pasul 2</span>
+              <p className="stepPara mt-4">Alegeți marca pentru a primi o estimare corectă.</p>
             </div>
             <div className="threeSec mt-5">
-              <p>I cant find the brand of my Item</p>
-              <p>How do I find out what the brand is?</p>
+              <p><b>Ce fac dacă nu găsesc marca produsului?</b>
+Mondis la moment acceptă doar mărcile listate în rezultatele căutării. Ne puteți contacta la info@mondis.ro pentru informații adăugătoare.</p>
+              
             </div>
           </div>
 

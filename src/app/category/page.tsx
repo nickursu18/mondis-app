@@ -12,7 +12,7 @@ export default function Home() {
   const supabase = createClient(supabaseUrl, supabaseKey);
   const router = useRouter();
   const searchParams = useSearchParams()
-
+let estim=0;
   const catm:any = searchParams.get('categories');
   async function getData() {
     const toS=catm.substring(0, catm.length - 1);
@@ -29,15 +29,16 @@ for(let i = 0; i < strArray.length; i++) {
 
     setCategory(amp);
   }
-  async function getSubCategory(cat_id: any) {
+  async function getSubCategory() {
 
     const { data: category } = await supabase
       .from('subcategory')
-      .select().eq('catid', cat_id);
+      .select();
     const amp: any = category;
 
     setSubCategory(amp);
   }
+  getSubCategory();
   if (categorys.length == 0) {
     getData();
   }
@@ -48,9 +49,9 @@ for(let i = 0; i < strArray.length; i++) {
       <div className="header flex items-center">
         <img src="logo.png" className='logo' />
         <div className="menu">
-        <a href="/" className="pls menu-item active">Recieve an Offer</a>
-          <a href="/parcels" className="menu-item hover:active">Your Parcels</a>
-          <a href="#" className="menu-item">Back to the Store</a>
+          <a href="/" className="pls menu-item active">Primiți o ofertă</a>
+          <a href="/parcels" className="menu-item hover:active">vânzările Dvs.</a>
+          <a href="#" className="menu-item">Înapoi spre magazin</a>
 
         </div>
 
@@ -59,23 +60,16 @@ for(let i = 0; i < strArray.length; i++) {
       <div className="w-full stepsContainer">
         <div className="grid grid-cols-2">
           <div>
-            <h3 className="topH">Choose your Category</h3>
-            <div className="flex gap-4 mt-5">
-            {categorys?.map((category) => (
-                <div key={category.id} className="items-center text-center">
-                  <img src={category.cat_img} onClick={() => getSubCategory(category.id)} className='hov' />
-                </div>   ))}
-              
-             </div>
-            <br />
+            <h3 className="topH">Alege Categoria</h3>
+            
             <div  className="items-start text-left amp2" style={{width:"70%"}}>
              
-              <h1 className="secHead2">Subcategories</h1>
+              <h1 className="secHead2">Subcategoria</h1>
               <ul>
-              {subCategory?.map((subCat) => (
-                <li key={subCat.id}><Link href={"/addtolist?gender="+encodeURIComponent(btoa(""+searchParams.get("gender")))+"&brand="+encodeURIComponent(btoa(""+searchParams.get("brand")))+"&categories="+encodeURIComponent(btoa(""+searchParams.get("categories")))+"&subcat="+encodeURIComponent(btoa(""+subCat.id))+"&estimate="+encodeURIComponent(btoa(""+subCat.estimation))+"&subcatname="+encodeURIComponent(btoa(""+subCat.subcat_name))} className='href'>
+              {subCategory?.map((subCat) => { if(searchParams.get("type") == "Luxury") { estim = subCat.luxury_cost; } else if(searchParams.get("type") == "Premium") { estim = subCat.premium_cost } else if(searchParams.get("type") == "Medium") { estim = subCat.medium_cost } else if(searchParams.get("type") == "Budget") { estim = subCat.budget_cost };return (
+                <li key={subCat.id}><Link href={"/addtolist?gender="+encodeURIComponent(btoa(""+searchParams.get("gender")))+"&brand="+encodeURIComponent(btoa(""+searchParams.get("brand")))+"&categories="+encodeURIComponent(btoa(""+searchParams.get("categories")))+"&subcat="+encodeURIComponent(btoa(""+subCat.id))+"&estimate="+encodeURIComponent(btoa(""+estim))+"&subcatname="+encodeURIComponent(btoa(""+subCat.subcat_name))} className='href'>
                   {subCat.subcat_name}</Link>
-                </li>   ))}
+                </li>   )})}
               </ul>
               
               </div>
@@ -88,11 +82,11 @@ for(let i = 0; i < strArray.length; i++) {
             <img src="step3.svg" className="mt-8" />
             <br />
             <div className="p-5">
-              <span className="stepSmall">Step 3</span>
-              <p className="stepPara mt-4">To get a quote for your item, Please choose the category of your article.</p>
+              <span className="stepSmall">Pasul 3</span>
+              <p className="stepPara mt-4">Alege categoria și subcategoria</p>
             </div>
             <div className="threeSec mt-5">
-            <p>Why is my Article Category Invalid?<br />I dont know which category my Article falls under.</p>
+            <p><b>Nu știu din ce categorie face parte produsul pe care îl am?</b><br />Dacă nu știți din ce categorie face parte obiectul dumneavoastră, puteți încerca următoarele: examinați-l pentru a identifica caracteristicile principale, comparați-l cu categoriile comune de îmbrăcăminte și accesorii și luați în considerare scopul și modul în care este purtat. Dacă tot nu sunteți sigur, puteți încerca să căutați online folosind cuvinte cheie legate de aspectul sau funcția obiectului pentru a găsi articole similare în diferite categorii și a face o presupunere educată.</p>
           </div>
           </div>
         

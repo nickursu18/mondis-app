@@ -9,9 +9,9 @@ export default function Home() {
       <div className="header flex items-center">
         <img src="logo.png" className='logo' />
         <div className="menu">
-          <a href="/" className="pls menu-item active">Recieve an Offer</a>
-          <a href="/parcels" className="menu-item hover:active">Your Parcels</a>
-          <a href="#" className="menu-item">Back to the Store</a>
+          <a href="/" className="pls menu-item active">Primiți o ofertă</a>
+          <a href="/parcels" className="menu-item hover:active">vânzările Dvs.</a>
+          <a href="#" className="menu-item">Înapoi spre magazin</a>
 
         </div>
 
@@ -20,35 +20,36 @@ export default function Home() {
       <div className="w-full stepsContainer">
         <div className="grid grid-cols-2">
           <div>
-            <h3 className="topH">Choose Gender</h3>
+            <h3 className="topH">Alegeți Genul</h3>
             <img src="gender_img.png" className="genderPhoto" />
             <br /><br />
             <div className="flex colmm">
               <Link href="/brand?gender=women" className="items-center text-center msg">
                 <img src="women.svg" style={{ height: "100px", width: "140px" }} className="chooseGender" />
-                <span className="genderLabel">Women</span>
+                <span className="genderLabel">Femei</span>
               </Link>
               <Link href="/brand?gender=men" className="items-center text-center msg">
                 <img src="men.svg" style={{ height: "100px", width: "140px" }} className="chooseGender" />
-                <span className="genderLabel">Men</span>
+                <span className="genderLabel">Bărbați</span>
               </Link>
               <Link href="/brand?gender=kids" className="items-center text-center msg">
                 <img src="kids.svg" style={{ height: "100px", width: "140px" }} className="chooseGender" />
-                <span className="genderLabel">Kids</span>
+                <span className="genderLabel">Copii</span>
               </Link>
             </div>
           </div>
           <div className="twoSec">
-            <h1 className="secHead">Items Description</h1>
-            <img src="steps.svg" className="mt-8" />
+            <h1 className="secHead">Descrierea Articolului</h1>
+            <img src="sttep1.svg" className="mt-8" />
             <br />
             <div className="p-5">
-              <span className="stepSmall">Step 1</span>
-              <p className="stepPara mt-4">To get a quote for your item, first indicate whether it is women’s, men’s or children’s.</p>
+              <span className="stepSmall">Pasul 1</span>
+              <p className="stepPara mt-4">Pentru a obține o ofertă pentru articolul dvs., indicați mai întâi dacă este pentru femei, bărbați sau copii.</p>
             </div>
             <div className="threeSec mt-5">
-            <p>How can we most easily distinguish
-womenswear from menswear?</p>
+            <p><b>Cum putem distinge cel mai ușor
+îmbrăcămintea pentru femei de cea pentru bărbați?</b><br />
+Îmbrăcămintea pentru femei are de obicei o tăietură mai feminină, cu linii mai moi și forme care evidențiază talia și curbele corpului. În plus, în multe culturi, închiderea nasturilor pe cămășile, sacourile și paltoanele bărbătești este pe partea dreaptă, în timp ce pentru hainele de damă, nasturii sunt pe partea stângă.</p>
           </div>
           </div>
         
