@@ -60,22 +60,22 @@ export default function Home() {
               </div>
               <div className="items-start text-left msg" style={{ width: "100%" }}>
                 <div className="threeSec2 mt-5">
-                  <h1 className="secHead3">peste 100 de mărci</h1>
+                  <h1 className="secHead3">Acceptăm pentru vânzări peste 100 de mărci.</h1>
                 </div>
               </div>
 
             </div>
           </div>
           <div className="twoSec">
-            <h1 className="secHead">Descrierea Articoluli</h1>
-            <img src="step2.svg" className="mt-8" />
+            <h1 className="secHead">Descrierea Articolului</h1>
+            <img src="steep.svg" className="mt-8" />
             <br />
             <div className="p-5">
               <span className="stepSmall">Pasul 2</span>
               <p className="stepPara mt-4">Alegeți marca pentru a primi o estimare corectă.</p>
             </div>
             <div className="threeSec mt-5">
-              <p><b>Ce fac dacă nu găsesc marca produsului?</b>
+              <p><b>Ce fac dacă nu găsesc marca produsului?</b><br />
 Mondis la moment acceptă doar mărcile listate în rezultatele căutării. Ne puteți contacta la info@mondis.ro pentru informații adăugătoare.</p>
               
             </div>

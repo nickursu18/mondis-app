@@ -78,8 +78,8 @@ for(let i = 0; i < strArray.length; i++) {
             
           </div>
           <div className="twoSec">
-            <h1 className="secHead">Items Description</h1>
-            <img src="step3.svg" className="mt-8" />
+            <h1 className="secHead">Descrierea Articolului</h1>
+            <img src="apap.svg" className="mt-8" />
             <br />
             <div className="p-5">
               <span className="stepSmall">Pasul 3</span>

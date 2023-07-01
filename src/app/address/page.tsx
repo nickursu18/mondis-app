@@ -57,7 +57,7 @@ export default function Home() {
                         <h3 className="topH">Alegeți adresa</h3><br />
 
                         <br />
-                        <p>Curierul va livra punga mondis la adresa dvs.</p>
+                        <p>Curierul va ridica coletul cu articolele Dvs. de la adresa pe care o veți indica.</p>
                         {addressData?.map((addressItem: any, i: any) => (
                             <div key={i} className="threeSec9 items-start text-left msg" style={{ width: "100%" }}>
                             <div className='item' onClick={() => createOrder(addressItem, cartData)}>
@@ -69,7 +69,7 @@ export default function Home() {
                         </div>
                         ))}
                         
-                        <Link className='mbtn mt-5' href="/addnewaddress">Add Address</Link>
+                        <Link className='mbtn mt-5' href="/addnewaddress">Adăugați o adresă</Link>
                     </div>
                     <div className="twoSec">
           <div className="items-start text-left amp2" style={{width:"100%"}}>
