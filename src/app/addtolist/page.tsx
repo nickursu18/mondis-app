@@ -44,7 +44,7 @@ export default function Home() {
           <div>
             <h3 className="topH">Estimarea Dvs.</h3><br />
             <p className='stepPara2'>
-            Pentru produsul din categoria x,y,z :
+            Pentru produsul din categoria {productS.gender} {productS.brand} {productS.subcatname} :
             </p>
             <h2 className="mt-2 bigBold">{productS.estimate} lei</h2>
             <br />
@@ -56,8 +56,8 @@ export default function Home() {
           <br />
           <img src="bbn.svg" />
           <br />
-          <p><b>Cum îmi voi primi banii?</b><br />În cazul validării estimării indicate, veți primi un gift card pe care îl puteți utiliza Dvs. sau oricine altcineva pe Mondis.ro. <br /><b>Care sunt criteriile de aprobare?</b><br />Pentru a fi validată estimarea, îmbrăcămintea și accesoriile dumneavoastră trebuie să fie curate și să nu prezinte semne de uzură. Acestea trebuie să fie nu aibă pete, găuri, fire scoase sau alte defecte.
-          <br /><b>Nu sunteți gată să adăugați acest articol spre vânzare?</b><br />
+          <p><b>Cum îmi voi primi banii?</b><br />În cazul validării estimării indicate, veți primi un gift card pe care îl puteți utiliza Dvs. sau oricine altcineva pe Mondis.ro. <br /><br /><b>Care sunt criteriile de aprobare?</b><br />Pentru a fi validată estimarea, îmbrăcămintea și accesoriile dumneavoastră trebuie să fie curate și să nu prezinte semne de uzură. Acestea trebuie să fie nu aibă pete, găuri, fire scoase sau alte defecte.
+          <br /><br /><b>Nu sunteți gată să adăugați acest articol spre vânzare?</b><br /><br />
 <a href="/">Verificați prețul pentru un alt produs</a>
           </p>
           
