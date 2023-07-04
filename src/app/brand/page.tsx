@@ -29,7 +29,7 @@ export default function Home() {
     <main className="flex flex-col items-center justify-between">
 
       <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet" />
-      <div className="header flex items-center">
+      <div className="header lg:flex items-center">
         <img src="logo.png" className='logo' />
         <div className="menu">
           <a href="/" className="pls menu-item active">Primiți o ofertă</a>
@@ -41,13 +41,13 @@ export default function Home() {
       </div>
       <hr className="bline w-full" />
       <div className="w-full stepsContainer">
-        <div className="grid grid-cols-2">
+        <div className="lg:grid lg:grid-cols-2">
           <div>
             <h3 className="topH">Alegeți marca</h3>
             <img src="brands.png" className="genderPhoto" />
             <br /><br />
             <input type="text" className='texts' onChange={(event) => { setSearchString(event.target.value); console.log(searchString); }} value={searchString} placeholder='Căutați marca' />
-            <div className="flex colmm2 mt-5">
+            <div className="lg:flex colmm2 mt-5">
               <div className="items-start text-left msg" style={{ width: "70%" }}>
                 <h1 className="secHead2">Cele mai bune vânzări</h1>
                 <ul>
@@ -66,7 +66,7 @@ export default function Home() {
 
             </div>
           </div>
-          <div className="twoSec">
+          <div className="lg:twoSec">
             <h1 className="secHead">Descrierea Articolului</h1>
             <img src="steep.svg" className="mt-8" />
             <br />

@@ -22,7 +22,7 @@ export default function Home() {
         city: city,
         street: street,
         postalCode: postalCode,
-        additional: additional,
+        additional: additional
         
     
       }
@@ -34,7 +34,7 @@ export default function Home() {
         <main className="flex flex-col items-center justify-between">
 
             <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet" />
-            <div className="header flex items-center">
+            <div className="header lg:flex items-center">
                 <img src="logo.png" className='logo' />
                 <div className="menu">
           <a href="/" className="pls menu-item active">Primiți o ofertă</a>
@@ -46,7 +46,7 @@ export default function Home() {
             </div>
             <hr className="bline w-full" />
             <div className="w-full stepsContainer">
-                <div className="grid grid-cols-2">
+                <div className="lg:grid lg:grid-cols-2">
                     <div className='items-start text-left'>
                         <h3 className="topH">Adaugă adresa </h3><br />
 
@@ -111,7 +111,7 @@ export default function Home() {
                             </div>
                         <Link href="/address" onClick={() => addAddress()} className='mbtn mt-5'>Salvează adresă</Link>
                     </div>
-                    <div className="twoSec">
+                    <div className="lg:twoSec">
           <div className="items-start text-left amp2" style={{width:"100%"}}>
           <h1 className="secHead2">Produse de vânzare</h1>
           <br />

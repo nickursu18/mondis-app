@@ -46,7 +46,7 @@ for(let i = 0; i < strArray.length; i++) {
     <main className="flex flex-col items-center justify-between">
 
       <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet" />
-      <div className="header flex items-center">
+      <div className="header lg:flex items-center">
         <img src="logo.png" className='logo' />
         <div className="menu">
           <a href="/" className="pls menu-item active">Primiți o ofertă</a>
@@ -58,7 +58,7 @@ for(let i = 0; i < strArray.length; i++) {
       </div>
       <hr className="bline w-full" />
       <div className="w-full stepsContainer">
-        <div className="grid grid-cols-2">
+        <div className="lg:grid grid-cols-2">
           <div>
             <h3 className="topH">Alege Categoria</h3>
             
@@ -77,7 +77,7 @@ for(let i = 0; i < strArray.length; i++) {
             <img src="cat.png" className="genderPhoto" />
             
           </div>
-          <div className="twoSec">
+          <div className="lg:twoSec">
             <h1 className="secHead">Descrierea Articolului</h1>
             <img src="apap.svg" className="mt-8" />
             <br />
