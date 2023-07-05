@@ -26,9 +26,11 @@ export default function Home() {
       : null
   );
   const [addressData, setAddressData] = useState<any[]>(
-    JSON.parse(
-      "[" + localStorage.getItem("address")?.replace("null,", "") + "]"
-    )
+    localStorage.getItem("address")
+      ? JSON.parse(
+          "[" + localStorage.getItem("address")?.replace("null,", "") + "]"
+        )
+      : null
   );
 
   async function createOrder(address_data: any, cart_data: any) {
