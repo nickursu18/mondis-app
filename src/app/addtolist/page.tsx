@@ -1,14 +1,15 @@
 "use client";
+import { nanoid } from "nanoid";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 export default function Home() {
   const searchParams = useSearchParams();
   const router = useRouter();
-
   const catm: any = searchParams.get("categories");
 
   const productS = {
+    id: nanoid(),
     gender: atob("" + searchParams.get("gender")),
     brand: atob("" + searchParams.get("brand")),
     categories: atob("" + searchParams.get("categories")),
@@ -17,10 +18,7 @@ export default function Home() {
     subcatname: atob("" + searchParams.get("subcatname")),
   };
   function addToCart() {
-    localStorage.setItem(
-      "items",
-      localStorage.getItem("items") + "," + JSON.stringify(productS)
-    );
+    localStorage.setItem('items', localStorage.getItem('items')  +","+JSON.stringify(productS));
     router.push("/addproducts");
   }
   //console.log(JSON.parse("["+localStorage.getItem('items')?.replace("null,","")+"]"));
@@ -30,16 +28,16 @@ export default function Home() {
         href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
         rel="stylesheet"
       />
-      <div className="header lg:flex items-center">
+      <div className="header flex flex-col sm:flex-row items-center">
         <img src="logo.png" className="logo" />
-        <div className="menu">
-          <a href="/" className="pls menu-item active">
+        <div className="flex flex-col space-y-4 sm:space-y-0 items-center sm:flex-row mt-4 sm:mt-[0]">
+          <a href="/" className="menu-item sm:p-[30px]">
             Primiți o ofertă
           </a>
-          <a href="/parcels" className="menu-item hover:active">
+          <a href="/parcels" className="menu-item sm:p-[30px]">
             Coletele Dvs.
           </a>
-          <a href="#" className="menu-item">
+          <a href="#" className="menu-item sm:p-[30px]">
             Înapoi spre magazin
           </a>
         </div>
@@ -65,7 +63,7 @@ export default function Home() {
               Adăugați în listă
             </Link>
           </div>
-          <div className="lg:twoSec">
+          <div className="lg:twoSec mt-10 lg:mt-0">
             <div
               className="items-start text-left amp2"
               style={{ width: "100%" }}

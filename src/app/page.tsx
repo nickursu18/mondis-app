@@ -8,16 +8,16 @@ export default function Home() {
         href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
         rel="stylesheet"
       />
-      <div className="header lg:flex items-center">
+      <div className="header flex flex-col sm:flex-row items-center">
         <img src="logo.png" className="logo" />
-        <div className="menu">
-          <a href="/" className="pls menu-item active sm:w-full">
+        <div className="flex flex-col space-y-4 sm:space-y-0 items-center sm:flex-row mt-4 sm:mt-[0]">
+          <a href="/" className="menu-item sm:p-[30px]">
             Primiți o ofertă
           </a>
-          <a href="/parcels" className="menu-item hover:active">
+          <a href="/parcels" className="menu-item sm:p-[30px]">
             Coletele Dvs.
           </a>
-          <a href="#" className="menu-item">
+          <a href="#" className="menu-item sm:p-[30px]">
             Înapoi spre magazin
           </a>
         </div>
@@ -66,7 +66,7 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <div className="lg:twoSec">
+          <div className="lg:twoSec mt-10 lg:mt-0">
             <h1 className="secHead">Descrierea Articolului</h1>
             <img src="sttep1.svg" className="mt-8" />
             <br />

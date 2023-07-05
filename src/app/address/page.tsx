@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -17,30 +17,29 @@ export default function Home() {
   const searchParams = useSearchParams();
   let estimateTotal = 0;
   let totProds = 0;
-  let addressData: any = [];
-  let cartData: any = [];
-
-  if (localStorage.getItem("items")) {
-    cartData = JSON.parse(
-      "[" + localStorage.getItem("items")?.replace("null,", "") + "]"
-    );
-  }
-  if (localStorage.getItem("address")) {
-    addressData = JSON.parse(
+  // let addressData: any = [];
+  const [cartData, setCartData] = useState(
+    typeof window !== "undefined"
+      ? JSON.parse(
+          "[" + localStorage.getItem("items")?.replace("null,", "") + "]"
+        )
+      : null
+  );
+  const [addressData, setAddressData] = useState<any[]>(
+    JSON.parse(
       "[" + localStorage.getItem("address")?.replace("null,", "") + "]"
-    );
-  }
+    )
+  );
+
   async function createOrder(address_data: any, cart_data: any) {
     const orderId = Math.random();
-    const { data: brands } = await supabase
-      .from("orders")
-      .insert({
-        address_data: address_data,
-        cart_data: cart_data,
-        nproduct: totProds,
-        amtproduct: estimateTotal,
-        orderId: orderId,
-      });
+    const { data: brands } = await supabase.from("orders").insert({
+      address_data: address_data,
+      cart_data: cart_data,
+      nproduct: totProds,
+      amtproduct: estimateTotal,
+      orderId: orderId,
+    });
     localStorage.removeItem("items");
     localStorage.setItem(
       "orderId",
@@ -49,22 +48,77 @@ export default function Home() {
 
     router.push("/parcels");
   }
+
+  const deleteProduct = (id: string) => {
+    const storeArray: any[] = JSON.parse(
+      "[" +
+        localStorage.getItem("items")?.substring(0).replace("null,", "") +
+        "]"
+    );
+
+    const updatedArray: any[] = storeArray.filter(
+      (item: any) => item.id !== id
+    );
+
+    var commaSeparatedString = updatedArray
+      .map((obj) => {
+        return JSON.stringify(obj);
+      })
+      .join(", ");
+
+    console.log(commaSeparatedString);
+
+    setCartData(updatedArray);
+    if (updatedArray?.length === 0) {
+      localStorage.setItem("items", "null");
+      return;
+    }
+    localStorage.setItem("items", "null," + commaSeparatedString);
+    // localStorage.setItem("items", JSON.stringify(updatedArray));
+  };
+
+  const deleteAddress = (id: string) => {
+    const storeArray: any[] = JSON.parse(
+      "[" +
+        localStorage.getItem("address")?.substring(0).replace("null,", "") +
+        "]"
+    );
+
+    const updatedArray = storeArray.filter((item: any) => item.id !== id);
+
+    var commaSeparatedString = updatedArray
+      .map((obj) => {
+        return JSON.stringify(obj);
+      })
+      .join(", ");
+
+    console.log(commaSeparatedString);
+
+    setAddressData(updatedArray);
+    if (updatedArray?.length === 0) {
+      localStorage.setItem("address", "null");
+      return;
+    }
+    localStorage.setItem("address", "null," + commaSeparatedString);
+    // localStorage.setItem("items", JSON.stringify(updatedArray));
+  };
+
   return (
     <main className="flex flex-col items-center justify-between">
       <link
         href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
         rel="stylesheet"
       />
-      <div className="header lg:flex items-center">
+      <div className="header flex flex-col sm:flex-row items-center">
         <img src="logo.png" className="logo" />
-        <div className="menu">
-          <a href="/" className="pls menu-item active">
+        <div className="flex flex-col space-y-4 sm:space-y-0 items-center sm:flex-row mt-4 sm:mt-[0]">
+          <a href="/" className="menu-item sm:p-[30px]">
             Primiți o ofertă
           </a>
-          <a href="/parcels" className="menu-item hover:active">
+          <a href="/parcels" className="menu-item sm:p-[30px]">
             Coletele Dvs.
           </a>
-          <a href="#" className="menu-item">
+          <a href="#" className="menu-item sm:p-[30px]">
             Înapoi spre magazin
           </a>
         </div>
@@ -87,13 +141,17 @@ export default function Home() {
                 className="threeSec9 items-start text-left msg"
                 style={{ width: "100%" }}
               >
-                <div
-                  className="item"
-                  onClick={() => createOrder(addressItem, cartData)}
-                >
+                <div className="item">
                   <div className="flex">
-                    <img src="trashicon.svg" />
-                    <span className="prodname3  w-full">
+                    <img
+                      alt="trash"
+                      onClick={() => deleteAddress(addressItem.id)}
+                      src="trashicon.svg"
+                    />
+                    <span
+                      onClick={() => createOrder(addressItem, cartData)}
+                      className="prodname3  w-full"
+                    >
                       {addressItem.street +
                         ", " +
                         addressItem.city +
@@ -109,7 +167,7 @@ export default function Home() {
               Adăugați o adresă
             </Link>
           </div>
-          <div className="lg:twoSec">
+          <div className="lg:twoSec mt-10 lg:mt-0">
             <div
               className="items-start text-left amp2"
               style={{ width: "100%" }}
@@ -121,7 +179,11 @@ export default function Home() {
                 return (
                   <div key={i} className="item">
                     <div className="flex">
-                      <img src="trashicon.svg" />
+                      <img
+                        alt="trash"
+                        onClick={() => deleteProduct(cartItem.id)}
+                        src="trashicon.svg"
+                      />
                       <span className="prodname  w-full">
                         {cartItem.gender.toUpperCase() +
                           " " +

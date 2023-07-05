@@ -2,15 +2,16 @@
 import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
+import { nanoid } from "nanoid";
 
 export default function Home() {
   let estimateTotal = 0;
-  const cartData =
-    typeof window !== "undefined"
-      ? JSON.parse(
-          "[" + localStorage.getItem("items")?.replace("null,", "") + "]"
-        )
-      : null;
+  // const cartData =
+  //   typeof window !== "undefined"
+  //     ? JSON.parse(
+  //         "[" + localStorage.getItem("items")?.replace("null,", "") + "]"
+  //       )
+  //     : null;
   const [name, setName] = useState("");
   const [familyName, setFamilyName] = useState("");
   const [email, setEmail] = useState("");
@@ -20,7 +21,9 @@ export default function Home() {
   const [street, setStreet] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [additional, setAdditional] = useState("");
+
   const addressS = {
+    id: nanoid(),
     name: name,
     familyName: familyName,
     email: email,
@@ -37,22 +40,59 @@ export default function Home() {
       localStorage.getItem("address") + "," + JSON.stringify(addressS)
     );
   }
+
+  const [cartData, setCartData] = useState(
+    typeof window !== "undefined"
+      ? JSON.parse(
+          "[" + localStorage.getItem("items")?.replace("null,", "") + "]"
+        )
+      : null
+  );
+
+  const deleteProduct = (id: string) => {
+    const storeArray: any[] = JSON.parse(
+      "[" +
+        localStorage.getItem("items")?.substring(0).replace("null,", "") +
+        "]"
+    );
+
+    const updatedArray: any[] = storeArray.filter(
+      (item: any) => item.id !== id
+    );
+
+    var commaSeparatedString = updatedArray
+      .map((obj) => {
+        return JSON.stringify(obj);
+      })
+      .join(", ");
+
+    console.log(commaSeparatedString);
+
+    setCartData(updatedArray);
+    if (updatedArray?.length === 0) {
+      localStorage.setItem("items", "null");
+      return;
+    }
+    localStorage.setItem("items", "null," + commaSeparatedString);
+    // localStorage.setItem("items", JSON.stringify(updatedArray));
+  };
+
   return (
     <main className="flex flex-col items-center justify-between">
       <link
         href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
         rel="stylesheet"
       />
-      <div className="header lg:flex items-center">
+      <div className="header flex flex-col sm:flex-row items-center">
         <img src="logo.png" className="logo" />
-        <div className="menu">
-          <a href="/" className="pls menu-item active">
+        <div className="flex flex-col space-y-4 sm:space-y-0 items-center sm:flex-row mt-4 sm:mt-[0]">
+          <a href="/" className="menu-item sm:p-[30px]">
             Primiți o ofertă
           </a>
-          <a href="/parcels" className="menu-item hover:active">
+          <a href="/parcels" className="menu-item sm:p-[30px]">
             Coletele Dvs.
           </a>
-          <a href="#" className="menu-item">
+          <a href="#" className="menu-item sm:p-[30px]">
             Înapoi spre magazin
           </a>
         </div>
@@ -212,7 +252,7 @@ export default function Home() {
               Salvează adresă
             </Link>
           </div>
-          <div className="lg:twoSec">
+          <div className="lg:twoSec mt-10 lg:mt-0">
             <div
               className="items-start text-left amp2"
               style={{ width: "100%" }}
@@ -224,7 +264,7 @@ export default function Home() {
                 return (
                   <div key={i} className="item">
                     <div className="flex">
-                      <img src="trashicon.svg" />
+                      <img alt="trash" onClick={() => deleteProduct(cartItem.id)} src="trashicon.svg" />
                       <span className="prodname  w-full">
                         {cartItem.gender.toUpperCase() +
                           " " +
