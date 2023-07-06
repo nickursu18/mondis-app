@@ -4,6 +4,9 @@ import { useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import moment from "moment";
+
+
 export default function Home() {
   const supabaseUrl: any = "https://pkrvehrepdgvyksotuyg.supabase.co";
   const supabaseKey: any =
@@ -24,9 +27,24 @@ export default function Home() {
     }
   }
 
+  const [orders, setOrders] = useState([]);
+
+  const fetchOrders = async () => {
+    const { data, error }: any = await supabase
+      .from("orders")
+      .select()
+      .in("id", orderData);
+
+    setOrders(data);
+  };
+
+  if (orderData) fetchOrders();
+
   const a = 100;
   const b = 200;
   const searchParams = useSearchParams();
+
+
 
   return (
     <main className="flex flex-col items-center justify-between">
@@ -34,7 +52,7 @@ export default function Home() {
         href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
         rel="stylesheet"
       />
-     <div className="header flex flex-col sm:flex-row items-center">
+      <div className="header flex flex-col sm:flex-row items-center">
         <img src="logo.png" className="logo" />
         <div className="flex flex-col space-y-4 sm:space-y-0 items-center sm:flex-row mt-4 sm:mt-[0]">
           <a href="/" className="menu-item sm:p-[30px]">
@@ -50,15 +68,17 @@ export default function Home() {
       </div>
       <hr className="bline w-full" />
       <div className="w-full stepsContainer">
-        <div className="lg:grid lg:grid-cols-2">
+        <div className="lg:grid lg:grid-cols-2 gap-10">
           <div className="items-start text-left">
-            {orderData?.map((orderItem: any, i: any) => {
+            {orders?.map((orderItem: any, i: any) => {
+              console.log(orderItem);
               return (
                 <div key={i} className="item2">
                   <div className="flex">
                     <img src="orangetick.svg" />
                     <span className="prodname w-full">
-                      Coletul July 1st (3 articole){" "}
+                      Coletul {moment(orderItem.created_at).format("MMMM Do")} (
+                      {orderItem.cart_data?.length} articole){" "}
                     </span>
                     <span className="prodname text-right items-right">
                       <img src="waiting.svg" />

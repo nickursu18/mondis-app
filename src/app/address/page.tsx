@@ -1,6 +1,8 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import axios from "axios";
+
 import { createClient } from "@supabase/supabase-js";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -35,21 +37,47 @@ export default function Home() {
 
   async function createOrder(address_data: any, cart_data: any) {
     const orderId = Math.random();
-    const { data: brands } = await supabase.from("orders").insert({
-      address_data: address_data,
-      cart_data: cart_data,
-      nproduct: totProds,
-      amtproduct: estimateTotal,
-      orderId: orderId,
-    });
-    localStorage.removeItem("items");
-    localStorage.setItem(
+    const { data }: any = await supabase
+      .from("orders")
+      .insert({
+        address_data: address_data,
+        cart_data: cart_data,
+        nproduct: totProds,
+        amtproduct: estimateTotal,
+        orderId: orderId,
+      })
+      .select();
+    console.log(data);
+    // localStorage.removeItem("items");
+    await localStorage.setItem(
       "orderId",
-      localStorage.getItem("orderId") + "," + orderId
+      localStorage.getItem("orderId") + "," + data[0].id
     );
 
-    router.push("/parcels");
+    // router.push("/parcels");
   }
+
+  const generateCourierOrder = async () => {
+    await axios
+      .request({
+        method: "POST",
+        headers: {
+          Credentials: true,
+        },
+        url: "https://api.fancourier.ro/login",
+        params: {
+          username: "Rapciuc1994",
+          password: "Mamaia123456789",
+        },
+      })
+      .then((res: any) => {
+        console.log(res);
+        axios.defaults.headers.common.Authorization = "Bearer " + res.token;
+      })
+      .catch((err) => console.log(err));
+  };
+
+  generateCourierOrder();
 
   const deleteProduct = (id: string) => {
     const storeArray: any[] = JSON.parse(

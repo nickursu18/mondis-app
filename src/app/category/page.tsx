@@ -39,6 +39,7 @@ export default function Home() {
     setSubCategory(amp);
   }
   getSubCategory();
+  
   if (categorys.length == 0) {
     getData();
   }
