@@ -1,8 +1,9 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { nanoid } from "nanoid";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   let estimateTotal = 0;
@@ -21,6 +22,7 @@ export default function Home() {
   const [street, setStreet] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [additional, setAdditional] = useState("");
+  const router = useRouter()
 
   const addressS = {
     id: nanoid(),
@@ -76,6 +78,12 @@ export default function Home() {
     localStorage.setItem("items", "null," + commaSeparatedString);
     // localStorage.setItem("items", JSON.stringify(updatedArray));
   };
+
+  useEffect(() => {
+    if (cartData.length === 0) {
+      router.push("/");
+    }
+  }, [cartData]);
 
   return (
     <main className="flex flex-col items-center justify-between">

@@ -1,11 +1,14 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import axios from "axios";
 
 import { createClient } from "@supabase/supabase-js";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { start } from "repl";
+import { generateCourierOrder } from "./action";
+
 export default function Home() {
   const supabaseUrl: any = "https://pkrvehrepdgvyksotuyg.supabase.co";
   const supabaseKey: any =
@@ -53,31 +56,47 @@ export default function Home() {
       "orderId",
       localStorage.getItem("orderId") + "," + data[0].id
     );
+    const res = await generateCourierOrder(data[0]);
+    if (res) {
+      alert("Success! Order Placed");
+    } else {
+      alert("Failed, Order did not placed");
+    }
 
     // router.push("/parcels");
   }
 
-  const generateCourierOrder = async () => {
-    await axios
-      .request({
-        method: "POST",
-        headers: {
-          Credentials: true,
-        },
-        url: "https://api.fancourier.ro/login",
-        params: {
-          username: "Rapciuc1994",
-          password: "Mamaia123456789",
-        },
-      })
-      .then((res: any) => {
-        console.log(res);
-        axios.defaults.headers.common.Authorization = "Bearer " + res.token;
-      })
-      .catch((err) => console.log(err));
-  };
+  useEffect(() => {
+    if (cartData.length === 0) {
+      router.push("/");
+    }
+  }, [cartData]);
 
-  generateCourierOrder();
+  // const generateCourierOrder = async () => {
+  //   await axios
+  //     .request({
+  //       method: "POST",
+  //       url: "https://api.fancourier.ro/login",
+  //       params: {
+  //         username: "Rapciuc1994",
+  //         password: "Mamaia123456789",
+  //       },
+  //     })
+  //     .then((res: any) => {
+  //       console.log(res);
+  //       axios.defaults.headers.common.Authorization = "Bearer " + res.token;
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
+
+  // const [isPending, startTransition] = useTransition();
+
+  // startTransition(() => {
+
+  //   generateCourierOrder();
+  // });
+
+  // generateCourierOrder();
 
   const deleteProduct = (id: string) => {
     const storeArray: any[] = JSON.parse(
@@ -172,22 +191,28 @@ export default function Home() {
                 style={{ width: "100%" }}
               >
                 <div className="item">
-                  <div className="flex">
+                  <div className="flex items-center">
                     <img
                       alt="trash"
                       onClick={() => deleteAddress(addressItem.id)}
                       src="trashicon.svg"
                     />
-                    <span
-                      onClick={() => createOrder(addressItem, cartData)}
-                      className="prodname3  w-full"
-                    >
+                    <span className="prodname3  w-full">
                       {addressItem.street +
                         ", " +
                         addressItem.city +
                         ", " +
                         addressItem.country}{" "}
                     </span>
+
+                    <button
+                      onClick={() => {
+                        createOrder(addressItem, cartData);
+                      }}
+                      className="mbtn mr-4 p-4"
+                    >
+                      Comandă FAN Courier
+                    </button>
                   </div>
                 </div>
               </div>
