@@ -39,7 +39,7 @@ export type OrderData = {
 };
 
 export const generateCourierOrder = async (order: OrderData) => {
-  console.log(order);
+  // console.log(order);
   await axios
     .request({
       method: "POST",
@@ -55,9 +55,9 @@ export const generateCourierOrder = async (order: OrderData) => {
     })
     .catch((err) => console.log(err));
 
-  // const awbData = await generateInternalAWB(order);
-  // console.log(awbData);
-  // const awbNumber = awbData.response[0].awbNumber;
+  const awbData = await generateInternalAWB(order);
+  console.log(awbData);
+  const awbNumber = awbData.response[0].awbNumber;
 
   const res = await createCourierOrder(order, 2);
   return res;
@@ -99,7 +99,7 @@ const generateInternalAWB = async (order: OrderData) => {
                 county: "Alba",
                 locality: "Abrud",
                 street: "1 Decembrie 1918",
-                // streetNo: "11C",
+                streetNo: "11C",
                 zipCode: "515100",
               },
             },
@@ -120,6 +120,7 @@ const createCourierOrder = async (order: OrderData, awbNumber: number) => {
     .request({
       method: "POST",
       url: "https://api.fancourier.ro/order",
+
       data: {
         info: {
           awbnumber: null, // it must be filled in with the AWB number if you want it to be printed by the courier, when picking up the shipment
