@@ -28,13 +28,14 @@ export default function Home() {
       .message("Name should have at least 2 letters"),
     email: Joi.string()
       .email({ tlds: { allow: false } })
-      .message("Invalid email").allow(null,""),
-    phone: Joi.string().optional().allow(null,""),
+      .message("Invalid email")
+      .allow(null, ""),
+    phone: Joi.string().optional().allow(null, ""),
     county: Joi.string().required(),
     locality: Joi.string().required(),
     street: Joi.string().required(),
-    postalCode: Joi.number().required().allow(null,""),
-    additional: Joi.string().optional().allow(null,""),
+    postalCode: Joi.number().required().allow(null, ""),
+    additional: Joi.string().optional().allow(null, ""),
   });
   const initialValues = {
     name: "",
@@ -116,22 +117,24 @@ export default function Home() {
   }, [cartData]);
   const setCountyData = async () => {
     const data = await fetchCounties();
-    if (data){ 
-     const counties = data.map((item:any)=>(item.name))
+    if (data) {
+      const counties = data.map((item: any) => item.name);
       setCounties(counties);
     }
   };
-  const setLocalityData = async (county:string) => {
+  const setLocalityData = async (county: string) => {
     const data = await fetchLocalities(county);
-    if (data){ 
-     const locaties = data.map((item:any)=>(item.name))
+    if (data) {
+      const locaties = data.map((item: any) => item.name);
       setLocalities(locaties);
     }
   };
-  const setStreetData = async (county:string,locality:string) => {
-    const data = await fetchStreets(county,locality);
-    if (data){ 
-     const streets = data.map((item:any)=>(item.street)).filter((item:any)=>item!=='')
+  const setStreetData = async (county: string, locality: string) => {
+    const data = await fetchStreets(county, locality);
+    if (data) {
+      const streets = data
+        .map((item: any) => item.street)
+        .filter((item: any) => item !== "");
       setStreet(streets);
     }
   };
@@ -139,16 +142,23 @@ export default function Home() {
     setCountyData();
   }, []);
 
-
   useEffect(() => {
-    if(form.values.county){
-      setLocalityData(form.values.county)
+    if (form.values.county) {
+      setLocalityData(form.values.county);
+    } else {
+      setLocalities([]);
+      setStreet([]);
+      form.setFieldValue("locality", "");
+      form.setFieldValue("street", "");
     }
   }, [form.values.county]);
 
   useEffect(() => {
-    if(form.values.locality){
-      setStreetData(form.values.county,form.values.locality)
+    if (form.values.locality) {
+      setStreetData(form.values.county, form.values.locality);
+    } else {
+      form.setFieldValue("street", "");
+      setStreet([]);
     }
   }, [form.values.locality]);
 
@@ -234,6 +244,7 @@ export default function Home() {
                   <br />
                   <Select
                     data={countiesData}
+                    clearable
                     classNames={classes}
                     searchable
                     {...form.getInputProps("county")}
@@ -246,6 +257,7 @@ export default function Home() {
                     data={locaitesData}
                     classNames={classes}
                     searchable
+                    clearable
                     nothingFound="No Option"
                     {...form.getInputProps("locality")}
                   />
@@ -259,6 +271,7 @@ export default function Home() {
                     data={streetData}
                     classNames={classes}
                     searchable
+                    clearable
                     nothingFound="No Option"
                     {...form.getInputProps("street")}
                   />
@@ -347,6 +360,9 @@ export default function Home() {
 
 const inputStyles = createStyles(() => ({
   input: {
+    "&:focus": {
+      border: "1px solid black",
+    },
     boxSizing: "border-box",
     color: "#808080",
     fontSize: "14px",
