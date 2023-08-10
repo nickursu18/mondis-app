@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import axios from "axios";
 
 import { createClient } from "@supabase/supabase-js";
@@ -8,10 +8,15 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { start } from "repl";
 import { generateCourierOrder } from "./action";
-import { Modal } from "@mantine/core";
+import { ActionIcon, Center, Modal, Select } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { DateInput, TimeInput } from "@mantine/dates";
+import moment from "moment";
+import { joiResolver, useForm } from "@mantine/form";
+import Joi from "joi";
 
 export default function Home() {
+  const ref = useRef<HTMLInputElement>();
   const supabaseUrl: any = "https://pkrvehrepdgvyksotuyg.supabase.co";
   const supabaseKey: any =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrcnZlaHJlcGRndnlrc290dXlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODc5NTQ4NTcsImV4cCI6MjAwMzUzMDg1N30.ZLsSjv5GYf82e2pLwOWrcbSH89jwuLedNdTEeqdQsKE";
@@ -41,9 +46,21 @@ export default function Home() {
       : null
   );
 
-  async function createOrder(address_data: any, cart_data: any) {
+  async function createOrder(
+    address_data: any,
+    cart_data: any,
+    pickup: {
+      date: string;
+      firstPickup: string;
+      secondPickup: string;
+    }
+  ) {
     const orderId = Math.random();
-    const courierOrderId = await generateCourierOrder(orderId, address_data);
+    const courierOrderId = await generateCourierOrder(
+      orderId,
+      address_data,
+      pickup
+    );
     if (courierOrderId) {
       const { data }: any = await supabase
         .from("orders")
@@ -72,6 +89,22 @@ export default function Home() {
       router.push("/");
     }
   }, [cartData]);
+
+  const schema = Joi.object({
+    date: Joi.date().required(),
+    firstPickup: Joi.string().required(),
+    secondPickup: Joi.string().required(),
+  });
+  const initialValues = {
+    date: "",
+    firstPickup: "",
+    secondPickup: "",
+  };
+
+  const form = useForm({
+    initialValues,
+    validate: joiResolver(schema),
+  });
 
   const deleteProduct = (id: string) => {
     const storeArray: any[] = JSON.parse(
@@ -126,6 +159,38 @@ export default function Home() {
     localStorage.setItem("address", "null," + commaSeparatedString);
     // localStorage.setItem("items", JSON.stringify(updatedArray));
   };
+  const weekTime = [
+    "09:00",
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+  ];
+  const offWeekTime = ["09:00", "10:00", "11:00", "12:00", "13:00"];
+  const fstPU = () => {
+    if (moment(form.values.date).day() === 6) {
+      return offWeekTime;
+    }
+    return weekTime;
+  };
+  const SndPU = () => {
+    const fPUIndex = weekTime.findIndex(
+      (item) => item === form.values.firstPickup
+    );
+    if (moment(form.values.date).day() === 6) {
+      console.log(offWeekTime.slice(fPUIndex + 2));
+      return offWeekTime.slice(fPUIndex + 2);
+    }
+    return weekTime.slice(fPUIndex + 2);
+  };
+  useEffect(() => {
+    if (form.values.firstPickup) {
+      form.setFieldValue("secondPickup", "");
+    }
+  }, [form.values.firstPickup]);
 
   return (
     <main className="flex flex-col items-center justify-between">
@@ -179,23 +244,52 @@ export default function Home() {
                         ", " +
                         addressItem.country}{" "}
                     </span>
-                    <Modal opened={opened} onClose={close} title="Order Pick Up Time">
-                      <div>
-                      {/* <DateInput
-      valueFormat="YYYY MMM DD"
-      label="Date input"
-      placeholder="Date input"
-      maw={400}
-      mx="auto"
-    /> */}
-                      </div>
-                      <button
-                        onClick={() => {
-                          createOrder(addressItem, cartData);
-                        }}
+
+                    <Modal
+                      opened={opened}
+                      onClose={close}
+                      centered
+                      keepMounted={true}
+                      size={600}
+                      title="Order Pick Up Time"
+                    >
+                      <form
+                        onSubmit={form.onSubmit((values) => {
+                          createOrder(addressItem, cartData, values);
+                        })}
                       >
-                        order
-                      </button>
+                        <div className="min-h-[40vh] space-y-5">
+                          <DateInput
+                            valueFormat="DD-MMM-YYYY"
+                            label="Date input"
+                            placeholder="Date input"
+                            weekendDays={[0]}
+                            excludeDate={(date) => moment(date).day() === 0}
+                            minDate={new Date()}
+                            {...form.getInputProps("date")}
+                          />
+                          <Select
+                            data={fstPU()}
+                            label="1st Pickup Time"
+                            dropdownPosition="bottom"
+                            searchable
+                            {...form.getInputProps("firstPickup")}
+                          />
+                          <Select
+                            data={SndPU()}
+                            label="2nd Pickup Time"
+                            dropdownPosition="bottom"
+                            searchable
+                            nothingFound="No Option"
+                            {...form.getInputProps("secondPickup")}
+                          />
+                          <Center>
+                            <button className="mbtn" type="submit">
+                              Order
+                            </button>
+                          </Center>
+                        </div>
+                      </form>
                     </Modal>
                     <button onClick={open} className="mbtn mr-4 p-4">
                       Comandă FAN Courier

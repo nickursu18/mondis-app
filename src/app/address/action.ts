@@ -1,5 +1,6 @@
 "use server";
 import axios from "axios";
+import moment from "moment";
 
 type AddressData = {
   id: string;
@@ -55,11 +56,15 @@ export const loginFanCourier = async ()=>{
     .catch((err) => {return false});
 }
 
-export const generateCourierOrder = async (orderId:number,address: AddressData) => {
+export const generateCourierOrder = async (orderId:number,address: AddressData,pickup:{
+  date: string,
+  firstPickup: string,
+  secondPickup: string,
+}) => {
   const res = await loginFanCourier()
   if(res){
   const awbNumber = await generateInternalAWB(orderId,address);
-  return await createCourierOrder(awbNumber);
+  return await createCourierOrder(awbNumber,pickup);
 }
 };
 
@@ -94,14 +99,12 @@ const generateInternalAWB = async (orderId:number,address: AddressData) => {
             recipient: {
               name: address.name,
               phone: address.phone,
-              email: 'siroves758@semonir.com',
-              // email: order.address_data.email,
+              email: address.email,
               address: {
-                county: "Alba",
-                locality: "Abrud",
-                street: "1 Decembrie 1918",
-                streetNo: "11C",
-                zipCode: "515100",
+                county: address.country,
+                locality: address.city,
+                street: address.street,
+                zipCode: address.postalCode,
               },
             },
           },
@@ -116,7 +119,11 @@ const generateInternalAWB = async (orderId:number,address: AddressData) => {
     });
 };
 
-const createCourierOrder = async ( awbNumber: number) => {
+const createCourierOrder = async ( awbNumber: number,pickup:{
+  date: string,
+  firstPickup: string,
+  secondPickup: string,
+}) => {
   return await axios
     .request({
       method: "POST",
@@ -137,11 +144,11 @@ const createCourierOrder = async ( awbNumber: number) => {
             height: 10,
           },
           orderType: "Standard", // mandatory; Standard or Express Loco
-          pickupDate: "2023-09-27", // the date when the courier will show up to pick up the shipment(s.
+          pickupDate: moment(pickup.date).format("YYYY-MM-DD"), // the date when the courier will show up to pick up the shipment(s.
           pickupHours: {
             // the interval cannot be below 2 hours
-            first: "09:00", // minimum pickup time
-            second: "16:00", // maximum pickup time
+            first: pickup.firstPickup, // minimum pickup time
+            second: pickup.secondPickup, // maximum pickup time
           },
           observations: "test",
         },
