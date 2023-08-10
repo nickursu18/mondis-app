@@ -8,7 +8,6 @@ import moment from "moment";
 import { trackCourierOrder } from "./action";
 import { OrderData } from "../address/action";
 
-
 export default function Home() {
   const supabaseUrl: any = "https://pkrvehrepdgvyksotuyg.supabase.co";
   const supabaseKey: any =
@@ -52,7 +51,28 @@ export default function Home() {
   const b = 200;
   const searchParams = useSearchParams();
   console.log(ordersTrack)
+  // const a = 100;
+  // const b = 200;
+  // const searchParams = useSearchParams();
 
+  const orderStatusName = (orderStatus: number) => {
+    switch (orderStatus) {
+      case 0:
+        return "Waiting Courier Pickup";
+      case 1:
+        return "Waiting to be Delivered";
+      case 2:
+        return "Estimation Recieved";
+      case 3:
+        return "Estimation Approved";
+      case 4:
+        return "Digital Contract Signed";
+      case 5:
+        return "Gift Card Issued";
+    }
+  };
+
+  console.log(orders);
 
   return (
     <main className="flex flex-col items-center justify-between">
@@ -78,24 +98,23 @@ export default function Home() {
       <div className="w-full stepsContainer">
         <div className="lg:grid lg:grid-cols-2 gap-10">
           <div className="items-start text-left">
-            {orders?.map((orderItem: any, i: any) => {
-              console.log(orderItem);
-              return (
+            {orders?.map((orderItem: any, i: any) => (
                 <div key={i} className="item2">
-                  <div className="flex">
+                  <div className="flex space-x-4">
                     <img src="orangetick.svg" />
                     <span className="prodname w-full">
                       Coletul {moment(orderItem.created_at).format("MMMM Do")} (
                       {orderItem.cart_data?.length} articole){" "}
                     </span>
-                    <span className="prodname text-right items-right">
-                      {}
                       <img src="waiting.svg" />
+                    <img src="parcel.svg" className="inline-block" />
+                    <span className="text-[9px]">
+                      {orderStatusName(orderItem.orderStatus)}
                     </span>
                   </div>
                 </div>
-              );
-            })}
+              
+            ))}
             {orderData?.length == 0 ? (
               <div>
                 <p>Nu aveți nici un colet expediat către Mondis. </p>
