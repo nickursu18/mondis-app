@@ -49,7 +49,7 @@ export const loginFanCourier = async ()=>{
       },
     })
     .then((res: any) => {
-      axios.defaults.headers.common.Authorization = "Bearer " + res.data.token;
+      axios.defaults.headers.common.Authorization = "Bearer " + res.data.data.token;
       return true
     })
     .catch((err) => {return false});

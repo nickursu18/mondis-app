@@ -4,6 +4,11 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
+import { useForm, joiResolver } from "@mantine/form";
+import Joi from "joi";
+import { Select, TextInput, Textarea, clsx, createStyles } from "@mantine/core";
+import axios from "axios";
+import { fetchCounties, fetchLocalities, fetchStreets } from "./action";
 
 export default function Home() {
   let estimateTotal = 0;
@@ -13,28 +18,53 @@ export default function Home() {
   //         "[" + localStorage.getItem("items")?.replace("null,", "") + "]"
   //       )
   //     : null;
-  const [name, setName] = useState("");
-  const [familyName, setFamilyName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [country, setCountry] = useState("");
-  const [city, setCity] = useState("");
-  const [street, setStreet] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-  const [additional, setAdditional] = useState("");
-  const router = useRouter()
+  const [countiesData, setCounties] = useState([]);
+  const [locaitesData, setLocalities] = useState([]);
+  const [streetData, setStreet] = useState([]);
+  const schema = Joi.object({
+    name: Joi.string().min(2).message("Name should have at least 2 letters"),
+    familyName: Joi.string()
+      .min(2)
+      .message("Name should have at least 2 letters"),
+    email: Joi.string()
+      .email({ tlds: { allow: false } })
+      .message("Invalid email").allow(null,""),
+    phone: Joi.string().optional().allow(null,""),
+    county: Joi.string().required(),
+    locality: Joi.string().required(),
+    street: Joi.string().required(),
+    postalCode: Joi.number().required().allow(null,""),
+    additional: Joi.string().optional().allow(null,""),
+  });
+  const initialValues = {
+    name: "",
+    familyName: "",
+    email: "",
+    phone: "",
+    county: "",
+    locality: "",
+    street: "",
+    postalCode: "",
+    additional: "",
+  };
+  const { classes } = inputStyles();
+  const form = useForm({
+    initialValues,
+    validate: joiResolver(schema),
+  });
+  const router = useRouter();
 
   const addressS = {
     id: nanoid(),
-    name: name,
-    familyName: familyName,
-    email: email,
-    phone: phone,
-    country: country,
-    city: city,
-    street: street,
-    postalCode: postalCode,
-    additional: additional,
+    name: form.values.name,
+    familyName: form.values.familyName,
+    email: form.values.email,
+    phone: form.values.phone,
+    country: form.values.county,
+    city: form.values.locality,
+    street: form.values.street,
+    postalCode: form.values.postalCode,
+    additional: form.values.additional,
   };
   function addAddress() {
     localStorage.setItem(
@@ -84,6 +114,48 @@ export default function Home() {
       router.push("/");
     }
   }, [cartData]);
+  const setCountyData = async () => {
+    const data = await fetchCounties();
+    if (data){ 
+     const counties = data.map((item:any)=>(item.name))
+      setCounties(counties);
+    }
+  };
+  const setLocalityData = async (county:string) => {
+    const data = await fetchLocalities(county);
+    if (data){ 
+     const locaties = data.map((item:any)=>(item.name))
+      setLocalities(locaties);
+    }
+  };
+  const setStreetData = async (county:string,locality:string) => {
+    const data = await fetchStreets(county,locality);
+    if (data){ 
+     const streets = data.map((item:any)=>(item.street)).filter((item:any)=>item!=='')
+      setStreet(streets);
+    }
+  };
+  useEffect(() => {
+    setCountyData();
+  }, []);
+
+
+  useEffect(() => {
+    if(form.values.county){
+      setLocalityData(form.values.county)
+    }
+  }, [form.values.county]);
+
+  useEffect(() => {
+    if(form.values.locality){
+      setStreetData(form.values.county,form.values.locality)
+    }
+  }, [form.values.locality]);
+
+  const handleSubmit = async (values: typeof initialValues) => {
+    addAddress();
+    router.push("/address");
+  };
 
   return (
     <main className="flex flex-col items-center justify-between">
@@ -106,209 +178,183 @@ export default function Home() {
         </div>
       </div>
       <hr className="bline w-full" />
-      <div className="w-full stepsContainer">
-        <div className="lg:grid lg:grid-cols-2 lg:gap-10">
-          <div className="items-start text-left space-y-4">
-            <h3 className="topH">Adaugă adresa </h3>
-            <br />
-
-            <br />
-            <p className="labl2">Destinatar</p>
-            <br />
-            <div className="flex cols-2 gap-5 w-full">
-              <div>
-                <b className="labl">Nume</b>
-                <br />
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(event) => {
-                    setName(event.target.value);
-                  }}
-                  className="texts"
-                  style={{ width: "100%" }}
-                  placeholder=""
-                />
-              </div>
-              <div>
-                <b className="labl">Prenume</b>
-                <br />
-                <input
-                  type="text"
-                  value={familyName}
-                  onChange={(event) => {
-                    setFamilyName(event.target.value);
-                  }}
-                  className="texts"
-                  style={{ width: "100%" }}
-                  placeholder=""
-                />
-              </div>
-            </div>
-            <div className="flex cols-2 gap-5 w-full">
-              <div>
-                <b className="labl">Telefon</b>
-                <br />
-                <input
-                  type="text"
-                  value={phone}
-                  onChange={(event) => {
-                    setPhone(event.target.value);
-                  }}
-                  className="texts"
-                  style={{ width: "100%" }}
-                  placeholder=""
-                />
-              </div>
-              <div>
-                <b className="labl">E-mail</b>
-                <br />
-                <input
-                  type="text"
-                  value={email}
-                  onChange={(event) => {
-                    setEmail(event.target.value);
-                  }}
-                  className="texts"
-                  style={{ width: "100%" }}
-                  placeholder=""
-                />
-              </div>
-            </div>
-            <br />
-            <p className="labl2">Adresa</p>
-            <br />
-            <div className="flex cols-2 gap-5 w-full">
-              <div>
-                <b className="labl">Țara</b>
-                <br />
-                <input
-                  type="text"
-                  value={country}
-                  onChange={(event) => {
-                    setCountry(event.target.value);
-                  }}
-                  className="texts"
-                  style={{ width: "100%" }}
-                  placeholder=""
-                />
-              </div>
-              <div>
-                <b className="labl">Oraș</b>
-                <br />
-                <input
-                  type="text"
-                  value={city}
-                  onChange={(event) => {
-                    setCity(event.target.value);
-                  }}
-                  className="texts"
-                  style={{ width: "100%" }}
-                  placeholder=""
-                />
-              </div>
-            </div>
-            <div className="flex cols-2 gap-5 w-full">
-              <div>
-                <b className="labl">Strada</b>
-                <br />
-                <input
-                  type="text"
-                  value={street}
-                  onChange={(event) => {
-                    setStreet(event.target.value);
-                  }}
-                  className="texts"
-                  style={{ width: "100%" }}
-                  placeholder=""
-                />
-              </div>
-              <div>
-                <b className="labl">Cod poștal</b>
-                <br />
-                <input
-                  type="text"
-                  value={postalCode}
-                  onChange={(event) => {
-                    setPostalCode(event.target.value);
-                  }}
-                  className="texts"
-                  style={{ width: "100%" }}
-                  placeholder=""
-                />
-              </div>
-            </div>
-            <div>
-              <b className="labl">Informații suplimentare</b>
+      <form onSubmit={form.onSubmit(handleSubmit)}>
+        <div className="w-full stepsContainer">
+          <div className="lg:grid lg:grid-cols-2 lg:gap-10">
+            <div className="items-start text-left space-y-4">
+              <h3 className="topH">Adaugă adresa </h3>
               <br />
-              <textarea
-                rows={5}
-                value={additional}
-                onChange={(event) => {
-                  setAdditional(event.target.value);
-                }}
-                className="texts"
-                style={{ width: "100%" }}
-                placeholder=""
-              ></textarea>
-            </div>
-            <Link
-              href="/address"
-              onClick={() => addAddress()}
-              className="mbtn mt-5"
-            >
-              Salvează adresă
-            </Link>
-          </div>
-          <div className="lg:twoSec mt-10 lg:mt-0">
-            <div
-              className="items-start text-left amp2"
-              style={{ width: "100%" }}
-            >
-              <h1 className="secHead2">Produse de vânzare</h1>
-              <br />
-              {cartData?.map((cartItem: any, i: any) => {
-                estimateTotal += parseInt(cartItem.estimate);
-                return (
-                  <div key={i} className="item">
-                    <div className="flex">
-                      <img alt="trash" onClick={() => deleteProduct(cartItem.id)} src="trashicon.svg" />
-                      <span className="prodname  w-full">
-                        {cartItem.gender.toUpperCase() +
-                          " " +
-                          cartItem.brand.toUpperCase() +
-                          " " +
-                          cartItem.subcatname}{" "}
-                      </span>
-                      <span className="prodname text-right items-right">
-                        {cartItem.estimate} lei
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
 
               <br />
-              <hr className="rline" />
+              <p className="labl2">Destinatar</p>
               <br />
-              <div className="item">
-                <div className="flex">
-                  <span className="prodname2  w-full text-lg">Veți primi </span>
-                  <span className="prodnamen text-right items-right">
-                    {estimateTotal} lei
-                  </span>
+              <div className="flex cols-2 gap-5 w-full">
+                <div>
+                  <b className="labl">Nume</b>
+                  <br />
+                  <TextInput
+                    classNames={classes}
+                    {...form.getInputProps("name")}
+                  />
+                </div>
+                <div>
+                  <b className="labl">Prenume</b>
+                  <br />
+
+                  <TextInput
+                    classNames={classes}
+                    {...form.getInputProps("familyName")}
+                  />
                 </div>
               </div>
-
-              <p className="text-md mt-10">
-                Vindeți mai ușor, mai ieftin și cu transport gratuit către
-                Mondis!
-              </p>
+              <div className="flex cols-2 gap-5 w-full">
+                <div>
+                  <b className="labl">Telefon</b>
+                  <br />
+                  <TextInput
+                    classNames={classes}
+                    {...form.getInputProps("phone")}
+                  />
+                </div>
+                <div>
+                  <b className="labl">E-mail</b>
+                  <br />
+                  <TextInput
+                    classNames={classes}
+                    {...form.getInputProps("email")}
+                  />
+                </div>
+              </div>
               <br />
+              <p className="labl2">Adresa</p>
+              <br />
+              <div className="flex cols-2 gap-5 w-full">
+                <div>
+                  <b className="labl">Țara</b>
+                  <br />
+                  <Select
+                    data={countiesData}
+                    classNames={classes}
+                    searchable
+                    {...form.getInputProps("county")}
+                  />
+                </div>
+                <div>
+                  <b className="labl">Oraș</b>
+                  <br />
+                  <Select
+                    data={locaitesData}
+                    classNames={classes}
+                    searchable
+                    nothingFound="No Option"
+                    {...form.getInputProps("locality")}
+                  />
+                </div>
+              </div>
+              <div className="flex cols-2 gap-5 w-full">
+                <div>
+                  <b className="labl">Strada</b>
+                  <br />
+                  <Select
+                    data={streetData}
+                    classNames={classes}
+                    searchable
+                    nothingFound="No Option"
+                    {...form.getInputProps("street")}
+                  />
+                </div>
+                <div>
+                  <b className="labl">Cod poștal</b>
+                  <br />
+
+                  <TextInput
+                    classNames={classes}
+                    {...form.getInputProps("postalCode")}
+                  />
+                </div>
+              </div>
+              <div>
+                <b className="labl">Informații suplimentare</b>
+                <br />
+                <Textarea
+                  classNames={classes}
+                  {...form.getInputProps("additional")}
+                />
+              </div>
+              <button type="submit" className="mbtn mt-5 w-full">
+                Salvează adresă
+              </button>
+            </div>
+            <div className="lg:twoSec mt-10 lg:mt-0">
+              <div
+                className="items-start text-left amp2"
+                style={{ width: "100%" }}
+              >
+                <h1 className="secHead2">Produse de vânzare</h1>
+                <br />
+                {cartData?.map((cartItem: any, i: any) => {
+                  estimateTotal += parseInt(cartItem.estimate);
+                  return (
+                    <div key={i} className="item">
+                      <div className="flex">
+                        <img
+                          alt="trash"
+                          onClick={() => deleteProduct(cartItem.id)}
+                          src="trashicon.svg"
+                        />
+                        <span className="prodname  w-full">
+                          {cartItem.gender.toUpperCase() +
+                            " " +
+                            cartItem.brand.toUpperCase() +
+                            " " +
+                            cartItem.subcatname}{" "}
+                        </span>
+                        <span className="prodname text-right items-right">
+                          {cartItem.estimate} lei
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                <br />
+                <hr className="rline" />
+                <br />
+                <div className="item">
+                  <div className="flex">
+                    <span className="prodname2  w-full text-lg">
+                      Veți primi{" "}
+                    </span>
+                    <span className="prodnamen text-right items-right">
+                      {estimateTotal} lei
+                    </span>
+                  </div>
+                </div>
+
+                <p className="text-md mt-10">
+                  Vindeți mai ușor, mai ieftin și cu transport gratuit către
+                  Mondis!
+                </p>
+                <br />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </form>
     </main>
   );
 }
+
+const inputStyles = createStyles(() => ({
+  input: {
+    boxSizing: "border-box",
+    color: "#808080",
+    fontSize: "14px",
+    width: "100%",
+    fontFamily: "sans-serif",
+    padding: "25px",
+    background: "#F7F7F7",
+    border: "1px solid #D8D8D8",
+    borderRadius: "10px",
+  },
+}));

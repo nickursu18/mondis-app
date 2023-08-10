@@ -8,6 +8,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { start } from "repl";
 import { generateCourierOrder } from "./action";
+import { Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 
 export default function Home() {
   const supabaseUrl: any = "https://pkrvehrepdgvyksotuyg.supabase.co";
@@ -19,6 +21,7 @@ export default function Home() {
   const [amtproduct, setAmtProduct] = useState(0);
   const a = 100;
   const b = 200;
+  const [opened, { open, close }] = useDisclosure(false);
   const searchParams = useSearchParams();
   let estimateTotal = 0;
   let totProds = 0;
@@ -69,7 +72,6 @@ export default function Home() {
       router.push("/");
     }
   }, [cartData]);
-
 
   const deleteProduct = (id: string) => {
     const storeArray: any[] = JSON.parse(
@@ -177,13 +179,25 @@ export default function Home() {
                         ", " +
                         addressItem.country}{" "}
                     </span>
-
-                    <button
-                      onClick={() => {
-                        createOrder(addressItem, cartData);
-                      }}
-                      className="mbtn mr-4 p-4"
-                    >
+                    <Modal opened={opened} onClose={close} title="Order Pick Up Time">
+                      <div>
+                      {/* <DateInput
+      valueFormat="YYYY MMM DD"
+      label="Date input"
+      placeholder="Date input"
+      maw={400}
+      mx="auto"
+    /> */}
+                      </div>
+                      <button
+                        onClick={() => {
+                          createOrder(addressItem, cartData);
+                        }}
+                      >
+                        order
+                      </button>
+                    </Modal>
+                    <button onClick={open} className="mbtn mr-4 p-4">
                       Comandă FAN Courier
                     </button>
                   </div>
