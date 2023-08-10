@@ -57,13 +57,8 @@ export default function Home() {
       localStorage.getItem("orderId") + "," + data[0].id
     );
     const res = await generateCourierOrder(data[0]);
-    if (res) {
-      alert("Success! Order Placed");
-    } else {
-      alert("Failed, Order did not placed");
-    }
-
-    // router.push("/parcels");
+      
+    router.push("/parcels");
   }
 
   useEffect(() => {

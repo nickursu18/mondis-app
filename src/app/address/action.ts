@@ -50,8 +50,8 @@ export const generateCourierOrder = async (order: OrderData) => {
       },
     })
     .then((res: any) => {
-      console.log(res.data.token);
-      axios.defaults.headers.common.Authorization = "Bearer " + res.data.token;
+      console.log(res.data.data.token);
+      axios.defaults.headers.common.Authorization = "Bearer " + res.data.data.token;
     })
     .catch((err) => console.log(err));
 
@@ -59,7 +59,7 @@ export const generateCourierOrder = async (order: OrderData) => {
   console.log(awbData);
   const awbNumber = awbData.response[0].awbNumber;
 
-  const res = await createCourierOrder(order, 2);
+  const res = await createCourierOrder(order, awbNumber);
   return res;
 };
 
