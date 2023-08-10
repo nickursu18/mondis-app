@@ -1,9 +1,8 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { Pagination } from "@mantine/core";
-
-
+import { Select } from "@mantine/core";
 
 export default function Home() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -12,11 +11,13 @@ export default function Home() {
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrcnZlaHJlcGRndnlrc290dXlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODc5NTQ4NTcsImV4cCI6MjAwMzUzMDg1N30.ZLsSjv5GYf82e2pLwOWrcbSH89jwuLedNdTEeqdQsKE";
   const supabase = createClient(supabaseUrl, supabaseKey);
   const [activePage, setPage] = useState(1);
+
   async function getData() {
     const { data: orders } = await supabase.from("orders").select();
     const amp: any = orders;
     setOrders(amp);
   }
+
   async function updateStatus(orderSt: any, orderId: any) {
     const { data: orders } = await supabase
       .from("orders")
@@ -39,23 +40,27 @@ export default function Home() {
     //alert("Estimation Updated Successfully!");
   }
 
-
-  if (orders.length === 0) {
+  useEffect(() => {
     getData();
-  }
+  }, []);
 
-  const itemsPerPage = 10;
-  const startIndex = (activePage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
+  const itemsPerPage = 5;
+  const startIndex = useMemo(
+    () => (activePage - 1) * itemsPerPage,
+    [activePage]
+  );
+  const endIndex = useMemo(() => startIndex + itemsPerPage, [startIndex]);
 
   // Get the orders to display on the current page
   const ordersToShow = useMemo(
     () => orders?.slice(startIndex, endIndex),
-    [activePage, orders]
+    [activePage, orders, startIndex, endIndex]
   );
 
+  useEffect(() => {
+    console.log(startIndex, endIndex, ordersToShow.length);
 
-
+  }, [activePage])
 
   return (
     <main className="flex flex-col items-center justify-between">
@@ -75,13 +80,26 @@ export default function Home() {
         </thead>
         <tbody>
           {ordersToShow.map((order: any, i: any) => (
-            <tr key={order.id + i}>
+            <tr key={order.id}>
               <td>{order.id}</td>
               <td>{order.address_data.name}</td>
               <td>{order.nproduct}</td>
               <td>{order.amtproduct}</td>
               <td>
-                <select
+                <Select
+                  miw={200}
+                  onChange={(event) => updateStatus(Number(event), order.id)}
+                  data={[
+                    { value: "0", label: "În Tranzit Spre Mondis" },
+                    { value: "1", label: "Estimare Primită" },
+                    { value: "2", label: "Estimare Aprobată" },
+                    { value: "3", label: "Contract Digital Semnat" },
+                    { value: "4", label: "Gift Card Emis" },
+                  ]}
+                  defaultValue={String(order.orderStatus)}
+                />
+                {/* <select
+                  className="border-2 border-solid"
                   onChange={(event) =>
                     updateStatus(event.target.value, order.id)
                   }
@@ -90,25 +108,25 @@ export default function Home() {
                     value="0"
                     selected={order.orderStatus == 0 ? true : false}
                   >
-                    Waiting Courier Pickup
+                    În Tranzit Spre Mondis
                   </option>
                   <option
                     value="1"
                     selected={order.orderStatus == 1 ? true : false}
                   >
-                    Waiting to be Delivered
+                    Estimare Primită
                   </option>
                   <option
                     value="2"
                     selected={order.orderStatus == 2 ? true : false}
                   >
-                    Estimation Recieved
+                    Estimare Aprobată
                   </option>
                   <option
                     value="3"
                     selected={order.orderStatus == 3 ? true : false}
                   >
-                    Estimation Approved
+                    Contract Digital Semnat
                   </option>
                   <option
                     value="4"
@@ -120,14 +138,15 @@ export default function Home() {
                     value="5"
                     selected={order.orderStatus == 5 ? true : false}
                   >
-                    Gift Card Issued
+                    Gift Card Emis
                   </option>
-                </select>
+                </select> */}
               </td>
               <td>
                 <input
+                  className="border-2 border-solid"
                   type="text"
-                  value={order.finalEstimate}
+                  value={order.finalEstimate || ""}
                   onChange={(event) =>
                     updateEstimate(event.target.value, order.id)
                   }
@@ -135,8 +154,9 @@ export default function Home() {
               </td>
               <td>
                 <input
+                  className="border-2 border-solid"
                   type="text"
-                  value={order.giftCardCode}
+                  value={order.giftCardCode || ""}
                   onChange={(event) =>
                     updateGiftCard(event.target.value, order.id)
                   }
@@ -178,7 +198,7 @@ export default function Home() {
         className="py-10"
         value={activePage}
         onChange={setPage}
-        total={Number(Math.ceil(orders.length / 10))}
+        total={Number(Math.ceil(orders.length / itemsPerPage))}
       />
     </main>
   );

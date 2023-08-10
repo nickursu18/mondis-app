@@ -35,12 +35,11 @@ export default function Home() {
       .select()
       .in("id", orderData);
 
-      setOrders(data);
+    setOrders(data);
   };
-  useEffect(()=>{
+  useEffect(() => {
     fetchOrders();
-  },[])
-  
+  }, []);
 
   const a = 100;
   const b = 200;
@@ -52,17 +51,34 @@ export default function Home() {
   const orderStatusName = (orderStatus: number) => {
     switch (orderStatus) {
       case 0:
-        return "Waiting Courier Pickup";
+        return "Așteptarea Colectării de Către Curier";
       case 1:
-        return "Waiting to be Delivered";
+        return "În Tranzit Spre Mondis";
       case 2:
-        return "Estimation Recieved";
+        return "Estimare Primită";
       case 3:
-        return "Estimation Approved";
+        return "Estimare Aprobată";
       case 4:
-        return "Digital Contract Signed";
+        return "Contract Digital Semnat";
       case 5:
-        return "Gift Card Issued";
+        return "Gift Card Emis";
+    }
+  };
+
+  const orderStatusImage = (orderStatus: number) => {
+    switch (orderStatus) {
+      case 0:
+        return "parcel.svg";
+      case 1:
+        return "Transition.svg";
+      case 2:
+        return "Estimation.svg";
+      case 3:
+        return "EstimationApprove.svg";
+      case 4:
+        return "DigitalContract.svg";
+      case 5:
+        return "Gift.svg";
     }
   };
 
@@ -93,21 +109,22 @@ export default function Home() {
         <div className="lg:grid lg:grid-cols-2 gap-10">
           <div className="items-start text-left">
             {orders?.map((orderItem: any, i: any) => (
-                <div key={i} className="item2">
-                  <div className="flex space-x-4">
-                    <img src="orangetick.svg" />
-                    <span className="prodname w-full">
-                      Coletul {moment(orderItem.created_at).format("MMMM Do")} (
-                      {orderItem.cart_data?.length} articole){" "}
-                    </span>
-                      <img src="waiting.svg" />
-                    <img src="parcel.svg" className="inline-block" />
-                    <span className="text-[9px]">
-                      {orderStatusName(orderItem.orderStatus)}
-                    </span>
-                  </div>
+              <div key={i} className="item2">
+                <div className="flex space-x-4">
+                  <img src="orangetick.svg" />
+                  <span className="prodname w-full">
+                    Coletul {moment(orderItem.created_at).format("MMMM Do")} (
+                    {orderItem.cart_data?.length} articole){" "}
+                  </span>
+                  <img
+                    src={orderStatusImage(orderItem.orderStatus)}
+                    className="inline-block"
+                  />
+                  <span className="text-[9px]">
+                    {orderStatusName(orderItem.orderStatus)}
+                  </span>
                 </div>
-              
+              </div>
             ))}
             {orderData?.length == 0 ? (
               <div>
