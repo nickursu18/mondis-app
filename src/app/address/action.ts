@@ -36,40 +36,41 @@ export type OrderData = {
   orderStatus: number;
   finalEstimate: null;
   giftCardCode: null;
+  fancourier_orderId:number
 };
 
-export const generateCourierOrder = async (order: OrderData) => {
-  // console.log(order);
-  await axios
+export const loginFanCourier = async ()=>{
+  return await axios
     .request({
       method: "POST",
       url: "https://api.fancourier.ro/login",
       params: {
-        username: "Rapciuc1994",
-        password: "Mamaia123456789",
+        username: process.env.fancourier_username,
+        password: process.env.fancourier_password,
       },
     })
     .then((res: any) => {
-      console.log(res.data.token);
       axios.defaults.headers.common.Authorization = "Bearer " + res.data.token;
+      return true
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {return false});
+}
 
-  const awbData = await generateInternalAWB(order);
-  console.log(awbData);
-  const awbNumber = awbData.response[0].awbNumber;
-
-  const res = await createCourierOrder(order, 2);
-  return res;
+export const generateCourierOrder = async (orderId:number,address: AddressData) => {
+  const res = await loginFanCourier()
+  if(res){
+  const awbNumber = await generateInternalAWB(orderId,address);
+  return await createCourierOrder(awbNumber);
+}
 };
 
-const generateInternalAWB = async (order: OrderData) => {
+const generateInternalAWB = async (orderId:number,address: AddressData) => {
   return await axios
     .request({
       method: "POST",
       url: "https://api.fancourier.ro/intern-awb",
       data: {
-        clientId: 7251049,
+        clientId: process.env.fancourier_clientid,
         shipments: [
           {
             info: {
@@ -82,7 +83,7 @@ const generateInternalAWB = async (order: OrderData) => {
               payment: "recipient",
               returnPayment: null,
               observation: "Observation",
-              content: `Order no. ${order.id}`,
+              content: `Order no. ${orderId}`,
               dimensions: {
                 length: 1,
                 height: 2,
@@ -92,9 +93,10 @@ const generateInternalAWB = async (order: OrderData) => {
               // options: ["X"],
             },
             recipient: {
-              name: order.address_data.name,
-              phone: order.address_data.phone,
-              email: "weraci4955@mahmul.com",
+              name: address.name,
+              phone: address.phone,
+              email: 'siroves758@semonir.com',
+              // email: order.address_data.email,
               address: {
                 county: "Alba",
                 locality: "Abrud",
@@ -108,22 +110,21 @@ const generateInternalAWB = async (order: OrderData) => {
       },
     })
     .then((res) => {
-      return res.data;
+      return res.data.response[0].awbNumber;
     })
     .catch((err) => {
       return null;
     });
 };
 
-const createCourierOrder = async (order: OrderData, awbNumber: number) => {
-  await axios
+const createCourierOrder = async ( awbNumber: number) => {
+  return await axios
     .request({
       method: "POST",
       url: "https://api.fancourier.ro/order",
-
       data: {
         info: {
-          awbnumber: null, // it must be filled in with the AWB number if you want it to be printed by the courier, when picking up the shipment
+          awbnumber: awbNumber, // it must be filled in with the AWB number if you want it to be printed by the courier, when picking up the shipment
           packages: {
             // mandatory
             parcel: 1,
@@ -145,17 +146,14 @@ const createCourierOrder = async (order: OrderData, awbNumber: number) => {
           },
           observations: "test",
         },
-        clientId: 7251049,
+        clientId: process.env.fancourier_clientid,
       },
     })
     .then((res) => {
-      console.log(res);
-      return true;
+      return res.data['data']['id']
     })
     .catch((e) => {
       console.log(e);
-      return false;
+      return undefined;
     });
-
-  return false;
 };

@@ -1,10 +1,12 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import moment from "moment";
+import { trackCourierOrder } from "./action";
+import { OrderData } from "../address/action";
 
 
 export default function Home() {
@@ -12,9 +14,9 @@ export default function Home() {
   const supabaseKey: any =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrcnZlaHJlcGRndnlrc290dXlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODc5NTQ4NTcsImV4cCI6MjAwMzUzMDg1N30.ZLsSjv5GYf82e2pLwOWrcbSH89jwuLedNdTEeqdQsKE";
   const supabase = createClient(supabaseUrl, supabaseKey);
-  const router = useRouter();
-  const [nproduct, setnProduct] = useState(0);
-  const [amtproduct, setAmtProduct] = useState(0);
+  // const router = useRouter();
+  // const [nproduct, setnProduct] = useState(0);
+  // const [amtproduct, setAmtProduct] = useState(0);
   let orderData: any;
   if (typeof window !== "undefined") {
     if (localStorage.getItem("orderId")) {
@@ -27,7 +29,8 @@ export default function Home() {
     }
   }
 
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState<OrderData[]>([]);
+  const [ordersTrack, setOrdersTrack] = useState([]);
 
   const fetchOrders = async () => {
     const { data, error }: any = await supabase
@@ -35,15 +38,20 @@ export default function Home() {
       .select()
       .in("id", orderData);
 
-    setOrders(data);
+      setOrders(data);
+      const res = await trackCourierOrder(data)
+      console.log(res)
+      setOrdersTrack(res)
   };
-
-  if (orderData) fetchOrders();
+  useEffect(()=>{
+    fetchOrders();
+  },[])
+  
 
   const a = 100;
   const b = 200;
   const searchParams = useSearchParams();
-
+  console.log(ordersTrack)
 
 
   return (
@@ -81,6 +89,7 @@ export default function Home() {
                       {orderItem.cart_data?.length} articole){" "}
                     </span>
                     <span className="prodname text-right items-right">
+                      {}
                       <img src="waiting.svg" />
                     </span>
                   </div>

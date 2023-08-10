@@ -40,30 +40,28 @@ export default function Home() {
 
   async function createOrder(address_data: any, cart_data: any) {
     const orderId = Math.random();
-    const { data }: any = await supabase
-      .from("orders")
-      .insert({
-        address_data: address_data,
-        cart_data: cart_data,
-        nproduct: totProds,
-        amtproduct: estimateTotal,
-        orderId: orderId,
-      })
-      .select();
-    console.log(data);
-    // localStorage.removeItem("items");
-    await localStorage.setItem(
-      "orderId",
-      localStorage.getItem("orderId") + "," + data[0].id
-    );
-    const res = await generateCourierOrder(data[0]);
-    if (res) {
-      alert("Success! Order Placed");
-    } else {
-      alert("Failed, Order did not placed");
-    }
-
-    // router.push("/parcels");
+    const courierOrderId = await generateCourierOrder(orderId, address_data);
+    if (courierOrderId) {
+      const { data }: any = await supabase
+        .from("orders")
+        .insert({
+          address_data: address_data,
+          cart_data: cart_data,
+          nproduct: totProds,
+          amtproduct: estimateTotal,
+          orderId: orderId,
+          fancourier_orderId: courierOrderId,
+        })
+        .select();
+      if (data) {
+        await localStorage.setItem(
+          "orderId",
+          localStorage.getItem("orderId") + "," + data[0].id
+        );
+        router.push("/parcels");
+      } else alert("Failed, Order did not placed");
+    } else alert("Failed, Order did not placed on courier service");
+    //
   }
 
   useEffect(() => {
