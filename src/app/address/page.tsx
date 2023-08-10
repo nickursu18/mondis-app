@@ -70,31 +70,6 @@ export default function Home() {
     }
   }, [cartData]);
 
-  // const generateCourierOrder = async () => {
-  //   await axios
-  //     .request({
-  //       method: "POST",
-  //       url: "https://api.fancourier.ro/login",
-  //       params: {
-  //         username: "Rapciuc1994",
-  //         password: "Mamaia123456789",
-  //       },
-  //     })
-  //     .then((res: any) => {
-  //       console.log(res);
-  //       axios.defaults.headers.common.Authorization = "Bearer " + res.token;
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
-
-  // const [isPending, startTransition] = useTransition();
-
-  // startTransition(() => {
-
-  //   generateCourierOrder();
-  // });
-
-  // generateCourierOrder();
 
   const deleteProduct = (id: string) => {
     const storeArray: any[] = JSON.parse(

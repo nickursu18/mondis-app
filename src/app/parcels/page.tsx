@@ -5,7 +5,6 @@ import { createClient } from "@supabase/supabase-js";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import moment from "moment";
-import { trackCourierOrder } from "./action";
 import { OrderData } from "../address/action";
 
 export default function Home() {
@@ -29,7 +28,6 @@ export default function Home() {
   }
 
   const [orders, setOrders] = useState<OrderData[]>([]);
-  const [ordersTrack, setOrdersTrack] = useState([]);
 
   const fetchOrders = async () => {
     const { data, error }: any = await supabase
@@ -38,9 +36,6 @@ export default function Home() {
       .in("id", orderData);
 
       setOrders(data);
-      const res = await trackCourierOrder(data)
-      console.log(res)
-      setOrdersTrack(res)
   };
   useEffect(()=>{
     fetchOrders();
@@ -50,7 +45,6 @@ export default function Home() {
   const a = 100;
   const b = 200;
   const searchParams = useSearchParams();
-  console.log(ordersTrack)
   // const a = 100;
   // const b = 200;
   // const searchParams = useSearchParams();
