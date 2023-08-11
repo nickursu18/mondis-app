@@ -256,33 +256,37 @@ export default function Home() {
                           centered
                           keepMounted={true}
                           size={600}
-                          title="Order Pick Up Time"
+                          title="Data si ora preluarii comenzii"
                         >
                           <form
                             onSubmit={form.onSubmit((values) => {
                               createOrder(addressItem, cartData, values);
                             })}
                           >
-                            <div className="min-h-[40vh] space-y-5">
+                            <div className="h-[300px] space-y-5">
                               <DateInput
                                 valueFormat="DD-MMM-YYYY"
-                                label="Date input"
-                                placeholder="Date input"
+                                label="Data preluare"
+                                placeholder="Data preluare"
                                 weekendDays={[0]}
-                                excludeDate={(date) => moment(date).day() === 0}
+                                excludeDate={(date) =>
+                                  moment(date).day() === 0 ||
+                                  moment(date).date() ===
+                                    moment(new Date()).date()
+                                }
                                 minDate={new Date()}
                                 {...form.getInputProps("date")}
                               />
                               <Select
                                 data={fstPU()}
-                                label="1st Pickup Time"
+                                label="Intre Ora"
                                 dropdownPosition="bottom"
                                 searchable
                                 {...form.getInputProps("firstPickup")}
                               />
                               <Select
                                 data={SndPU()}
-                                label="2nd Pickup Time"
+                                label="Si Ora"
                                 dropdownPosition="bottom"
                                 searchable
                                 nothingFound="No Option"
@@ -292,16 +296,18 @@ export default function Home() {
                                 <Button
                                   disabled={!form.isValid()}
                                   loading={loading}
-                                  styles={{root: {
-                                    "&:hover": {
-                                      backgroundColor: "#CD76BA"
-                                    }
-                                  }}}
+                                  styles={{
+                                    root: {
+                                      "&:hover": {
+                                        backgroundColor: "#CD76BA",
+                                      },
+                                    },
+                                  }}
                                   className="mbtn"
                                   size="md"
                                   type="submit"
                                 >
-                                  Order
+                                  Plaseaza comanda
                                 </Button>
                               </Center>
                             </div>
