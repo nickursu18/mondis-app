@@ -8,7 +8,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { start } from "repl";
 import { generateCourierOrder } from "./action";
-import { ActionIcon, Center, Modal, Select } from "@mantine/core";
+import { ActionIcon, Button, Center, Modal, Select } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { DateInput, TimeInput } from "@mantine/dates";
 import moment from "moment";
@@ -24,6 +24,7 @@ export default function Home() {
   const router = useRouter();
   const [nproduct, setnProduct] = useState(0);
   const [amtproduct, setAmtProduct] = useState(0);
+  const [loading, setLoading] = useState(false);
   const a = 100;
   const b = 200;
   const [opened, { open, close }] = useDisclosure(false);
@@ -32,18 +33,18 @@ export default function Home() {
   let totProds = 0;
   // let addressData: any = [];
   const [cartData, setCartData] = useState(
-    typeof window !== "undefined"
+    typeof window !== "undefined" && localStorage.getItem("items")
       ? JSON.parse(
           "[" + localStorage.getItem("items")?.replace("null,", "") + "]"
         )
-      : null
+      : []
   );
   const [addressData, setAddressData] = useState<any[]>(
-    localStorage.getItem("address")
+    typeof window !== "undefined" && localStorage.getItem("address")
       ? JSON.parse(
           "[" + localStorage.getItem("address")?.replace("null,", "") + "]"
         )
-      : null
+      : []
   );
 
   async function createOrder(
@@ -55,6 +56,7 @@ export default function Home() {
       secondPickup: string;
     }
   ) {
+    setLoading(true);
     const orderId = Math.random();
     const courierOrderId = await generateCourierOrder(
       orderId,
@@ -78,10 +80,11 @@ export default function Home() {
           "orderId",
           localStorage.getItem("orderId") + "," + data[0].id
         );
+        setLoading(false);
         router.push("/parcels");
       } else alert("Failed, Order did not placed");
     } else alert("Failed, Order did not placed on courier service");
-    //
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -193,169 +196,186 @@ export default function Home() {
   }, [form.values.firstPickup]);
 
   return (
-    <main className="flex flex-col items-center justify-between">
-      <link
-        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
-        rel="stylesheet"
-      />
-      <div className="header flex flex-col sm:flex-row items-center">
-        <img src="logo.png" className="logo" />
-        <div className="flex flex-col space-y-4 sm:space-y-0 items-center sm:flex-row mt-4 sm:mt-[0]">
-          <a href="/" className="menu-item sm:p-[30px]">
-            Primiți o ofertă
-          </a>
-          <a href="/parcels" className="menu-item sm:p-[30px]">
-            Coletele Dvs.
-          </a>
-          <a href="#" className="menu-item sm:p-[30px]">
-            Înapoi spre magazin
-          </a>
-        </div>
-      </div>
-      <hr className="bline w-full" />
-      <div className="w-full stepsContainer">
-        <div className="lg:grid lg:grid-cols-2 lg:gap-10">
-          <div className="items-start text-left">
-            <h3 className="topH">Alegeți adresa</h3>
-            <br />
-
-            <br />
-            <p>
-              Curierul va ridica coletul cu articolele Dvs. de la adresa pe care
-              o veți indica.
-            </p>
-            {addressData?.map((addressItem: any, i: any) => (
-              <div
-                key={i}
-                className="threeSec9 items-start text-left msg"
-                style={{ width: "100%" }}
-              >
-                <div className="item">
-                  <div className="flex items-center">
-                    <img
-                      alt="trash"
-                      onClick={() => deleteAddress(addressItem.id)}
-                      src="trashicon.svg"
-                    />
-                    <span className="prodname3  w-full">
-                      {addressItem.street +
-                        ", " +
-                        addressItem.city +
-                        ", " +
-                        addressItem.country}{" "}
-                    </span>
-
-                    <Modal
-                      opened={opened}
-                      onClose={close}
-                      centered
-                      keepMounted={true}
-                      size={600}
-                      title="Order Pick Up Time"
-                    >
-                      <form
-                        onSubmit={form.onSubmit((values) => {
-                          createOrder(addressItem, cartData, values);
-                        })}
-                      >
-                        <div className="min-h-[40vh] space-y-5">
-                          <DateInput
-                            valueFormat="DD-MMM-YYYY"
-                            label="Date input"
-                            placeholder="Date input"
-                            weekendDays={[0]}
-                            excludeDate={(date) => moment(date).day() === 0}
-                            minDate={new Date()}
-                            {...form.getInputProps("date")}
-                          />
-                          <Select
-                            data={fstPU()}
-                            label="1st Pickup Time"
-                            dropdownPosition="bottom"
-                            searchable
-                            {...form.getInputProps("firstPickup")}
-                          />
-                          <Select
-                            data={SndPU()}
-                            label="2nd Pickup Time"
-                            dropdownPosition="bottom"
-                            searchable
-                            nothingFound="No Option"
-                            {...form.getInputProps("secondPickup")}
-                          />
-                          <Center>
-                            <button className="mbtn" type="submit">
-                              Order
-                            </button>
-                          </Center>
-                        </div>
-                      </form>
-                    </Modal>
-                    <button onClick={open} className="mbtn mr-4 p-4">
-                      Comandă FAN Courier
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-
-            <Link className="mbtn mt-5" href="/addnewaddress">
-              Adăugați o adresă
-            </Link>
+    <>
+      {cartData.length !== 0 && (
+        <main className="flex flex-col items-center justify-between">
+          <link
+            href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+            rel="stylesheet"
+          />
+          <div className="header flex flex-col sm:flex-row items-center">
+            <img src="logo.png" className="logo" />
+            <div className="flex flex-col space-y-4 sm:space-y-0 items-center sm:flex-row mt-4 sm:mt-[0]">
+              <a href="/" className="menu-item sm:p-[30px]">
+                Primiți o ofertă
+              </a>
+              <a href="/parcels" className="menu-item sm:p-[30px]">
+                Coletele Dvs.
+              </a>
+              <a href="#" className="menu-item sm:p-[30px]">
+                Înapoi spre magazin
+              </a>
+            </div>
           </div>
-          <div className="lg:twoSec mt-10 lg:mt-0">
-            <div
-              className="items-start text-left amp2"
-              style={{ width: "100%" }}
-            >
-              <h1 className="secHead2">Produse de vânzare</h1>
-              <br />
-              {cartData?.map((cartItem: any, i: any) => {
-                estimateTotal += parseInt(cartItem.estimate);
-                return (
-                  <div key={i} className="item">
+          <hr className="bline w-full" />
+          <div className="w-full stepsContainer">
+            <div className="lg:grid lg:grid-cols-2 lg:gap-10">
+              <div className="items-start text-left">
+                <h3 className="topH">Alegeți adresa</h3>
+                <br />
+
+                <br />
+                <p>
+                  Curierul va ridica coletul cu articolele Dvs. de la adresa pe
+                  care o veți indica.
+                </p>
+                {addressData?.map((addressItem: any, i: any) => (
+                  <div
+                    key={i}
+                    className="threeSec9 items-start text-left msg"
+                    style={{ width: "100%" }}
+                  >
+                    <div className="item">
+                      <div className="flex items-center">
+                        <img
+                          alt="trash"
+                          onClick={() => deleteAddress(addressItem.id)}
+                          src="trashicon.svg"
+                        />
+                        <span className="prodname3  w-full">
+                          {addressItem.street +
+                            ", " +
+                            addressItem.city +
+                            ", " +
+                            addressItem.country}{" "}
+                        </span>
+
+                        <Modal
+                          opened={opened}
+                          onClose={close}
+                          centered
+                          keepMounted={true}
+                          size={600}
+                          title="Order Pick Up Time"
+                        >
+                          <form
+                            onSubmit={form.onSubmit((values) => {
+                              createOrder(addressItem, cartData, values);
+                            })}
+                          >
+                            <div className="min-h-[40vh] space-y-5">
+                              <DateInput
+                                valueFormat="DD-MMM-YYYY"
+                                label="Date input"
+                                placeholder="Date input"
+                                weekendDays={[0]}
+                                excludeDate={(date) => moment(date).day() === 0}
+                                minDate={new Date()}
+                                {...form.getInputProps("date")}
+                              />
+                              <Select
+                                data={fstPU()}
+                                label="1st Pickup Time"
+                                dropdownPosition="bottom"
+                                searchable
+                                {...form.getInputProps("firstPickup")}
+                              />
+                              <Select
+                                data={SndPU()}
+                                label="2nd Pickup Time"
+                                dropdownPosition="bottom"
+                                searchable
+                                nothingFound="No Option"
+                                {...form.getInputProps("secondPickup")}
+                              />
+                              <Center>
+                                <Button
+                                  disabled={!form.isValid()}
+                                  loading={loading}
+                                  styles={{root: {
+                                    "&:hover": {
+                                      backgroundColor: "#CD76BA"
+                                    }
+                                  }}}
+                                  className="mbtn"
+                                  size="md"
+                                  type="submit"
+                                >
+                                  Order
+                                </Button>
+                              </Center>
+                            </div>
+                          </form>
+                        </Modal>
+                        <button onClick={open} className="mbtn mr-4 p-4">
+                          Comandă FAN Courier
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                <Link className="mbtn mt-5" href="/addnewaddress">
+                  Adăugați o adresă
+                </Link>
+              </div>
+              <div className="lg:twoSec mt-10 lg:mt-0">
+                <div
+                  className="items-start text-left amp2"
+                  style={{ width: "100%" }}
+                >
+                  <h1 className="secHead2">Produse de vânzare</h1>
+                  <br />
+                  {cartData?.map((cartItem: any, i: any) => {
+                    estimateTotal += parseInt(cartItem.estimate);
+                    return (
+                      <div key={i} className="item">
+                        <div className="flex">
+                          <img
+                            alt="trash"
+                            onClick={() => deleteProduct(cartItem.id)}
+                            src="trashicon.svg"
+                          />
+                          <span className="prodname  w-full">
+                            {cartItem.gender.toUpperCase() +
+                              " " +
+                              cartItem.brand.toUpperCase() +
+                              " " +
+                              cartItem.subcatname}{" "}
+                          </span>
+                          <span className="prodname text-right items-right">
+                            {cartItem.estimate} lei
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  <br />
+                  <hr className="rline" />
+                  <br />
+                  <div className="item">
                     <div className="flex">
-                      <img
-                        alt="trash"
-                        onClick={() => deleteProduct(cartItem.id)}
-                        src="trashicon.svg"
-                      />
-                      <span className="prodname  w-full">
-                        {cartItem.gender.toUpperCase() +
-                          " " +
-                          cartItem.brand.toUpperCase() +
-                          " " +
-                          cartItem.subcatname}{" "}
+                      <span className="prodname2  w-full text-lg">
+                        Vei primi{" "}
                       </span>
-                      <span className="prodname text-right items-right">
-                        {cartItem.estimate} lei
+                      <span className="prodnamen text-right items-right">
+                        {estimateTotal} lei
                       </span>
                     </div>
                   </div>
-                );
-              })}
 
-              <br />
-              <hr className="rline" />
-              <br />
-              <div className="item">
-                <div className="flex">
-                  <span className="prodname2  w-full text-lg">Vei primi </span>
-                  <span className="prodnamen text-right items-right">
-                    {estimateTotal} lei
-                  </span>
+                  <p className="text-md mt-10">
+                    Vindeți mai ușor, mai ieftin și cu transport gratuit către
+                    Mondis!
+                  </p>
+                  <br />
                 </div>
               </div>
-
-              <p className="text-md mt-10">
-                Vindeți mai ușor, mai ieftin și cu transport gratuit către
-                Mondis!
-              </p>
-              <br />
             </div>
           </div>
-        </div>
-      </div>
-    </main>
+        </main>
+      )}
+    </>
   );
 }

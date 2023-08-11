@@ -1,7 +1,7 @@
 "use client";
 import { useMemo, useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
-import { Pagination } from "@mantine/core";
+import { Input, Pagination } from "@mantine/core";
 import { Select } from "@mantine/core";
 
 export default function Home() {
@@ -87,7 +87,7 @@ export default function Home() {
               <td>{order.amtproduct}</td>
               <td>
                 <Select
-                  miw={200}
+                  miw={150}
                   onChange={(event) => updateStatus(Number(event), order.id)}
                   data={[
                     { value: "0", label: "În Tranzit Spre Mondis" },
@@ -98,53 +98,11 @@ export default function Home() {
                   ]}
                   defaultValue={String(order.orderStatus)}
                 />
-                {/* <select
-                  className="border-2 border-solid"
-                  onChange={(event) =>
-                    updateStatus(event.target.value, order.id)
-                  }
-                >
-                  <option
-                    value="0"
-                    selected={order.orderStatus == 0 ? true : false}
-                  >
-                    În Tranzit Spre Mondis
-                  </option>
-                  <option
-                    value="1"
-                    selected={order.orderStatus == 1 ? true : false}
-                  >
-                    Estimare Primită
-                  </option>
-                  <option
-                    value="2"
-                    selected={order.orderStatus == 2 ? true : false}
-                  >
-                    Estimare Aprobată
-                  </option>
-                  <option
-                    value="3"
-                    selected={order.orderStatus == 3 ? true : false}
-                  >
-                    Contract Digital Semnat
-                  </option>
-                  <option
-                    value="4"
-                    selected={order.orderStatus == 4 ? true : false}
-                  >
-                    Digital Contract Signed
-                  </option>
-                  <option
-                    value="5"
-                    selected={order.orderStatus == 5 ? true : false}
-                  >
-                    Gift Card Emis
-                  </option>
-                </select> */}
               </td>
               <td>
-                <input
+                <Input
                   className="border-2 border-solid"
+                  miw={100}
                   type="text"
                   value={order.finalEstimate || ""}
                   onChange={(event) =>
@@ -153,7 +111,8 @@ export default function Home() {
                 />
               </td>
               <td>
-                <input
+                <Input
+                miw={100}
                   className="border-2 border-solid"
                   type="text"
                   value={order.giftCardCode || ""}
