@@ -30,13 +30,13 @@ body {
 table tr td {
   text-align:left;
   border-bottom:1px solid gray;
-  padding:10px 5px;
+  padding:10px 15px;
   font-size: small;
 }
 table tr th {
   text-align:left;
   border-bottom:1px solid gray;
-  padding:10px 5px;
+  padding:10px 15px;
   font-size: small;
 }
 .bline {

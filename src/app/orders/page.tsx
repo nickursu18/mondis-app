@@ -3,6 +3,7 @@ import { useMemo, useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { Input, Pagination } from "@mantine/core";
 import { Select } from "@mantine/core";
+import moment from "moment";
 
 export default function Home() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -13,7 +14,7 @@ export default function Home() {
   const [activePage, setPage] = useState(1);
 
   async function getData() {
-    const { data: orders } = await supabase.from("orders").select();
+    const { data: orders } = await supabase.from("orders").select().order("created_at", {ascending: false});
     const amp: any = orders;
     setOrders(amp);
   }
@@ -57,6 +58,10 @@ export default function Home() {
     [activePage, orders, startIndex, endIndex]
   );
 
+
+
+
+
   return (
     <main className="flex flex-col items-center justify-between">
       <table className="table-auto w-full">
@@ -65,24 +70,31 @@ export default function Home() {
             <th>Numărul comenzii</th>
             <th>Numele Clientului</th>
             <th>Nr. Produse</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>abordare</th>
             <th>Estimarea</th>
             <th>Statutul Coletului</th>
             <th>Validarea</th>
             <th>Gift Card</th>
-            <th className="w-full">Products</th>
+            <th>Products</th>
+            <th>creat la</th>
             {/* <th>Actions</th> */}
           </tr>
         </thead>
         <tbody>
           {ordersToShow.map((order: any, i: any) => (
             <tr key={order.id}>
-              <td>{order.id}</td>
-              <td>{order.address_data.name}</td>
-              <td>{order.nproduct}</td>
+              <td className="w-[40px]">{order.id}</td>
+              <td className="w-[40px]">{order.address_data.name}</td>
+              <td className="w-[40px]">{order.nproduct}</td>
+              <td>{order.address_data?.email || "N/A"}</td>
+              <td>{order.address_data?.phone || "N/A"}</td>
+              <td className="w-[150px]">{`${order.address_data?.country ?? ""} ${order.address_data?.city ?? ""} ${order.address_data?.country ?? ""} ${order.address_data?.street ?? ""} ${order.address_data?.building ?? ""} ${order.address_data?.postalCode ?? ""} `}</td>
               <td>{order.amtproduct}</td>
               <td>
                 <Select
-                  miw={150}
+                  w={150}
                   onChange={(event) => updateStatus(Number(event), order.id)}
                   data={[
                     { value: "0", label: "Așteptarea Colectării de Către Curier" },
@@ -101,7 +113,8 @@ export default function Home() {
               <td>
                 <Input
                   className="border-2 border-solid"
-                  miw={100}
+                  // miw={"20px"}
+                  w={80}
                   type="text"
                   defaultValue={order.finalEstimate || ""}
                   onChange={(event) =>
@@ -111,7 +124,8 @@ export default function Home() {
               </td>
               <td>
                 <Input
-                miw={100}
+                // miw={20}
+                w={80}
                   className="border-2 border-solid"
                   type="text"
                   defaultValue={order.giftCardCode || ""}
@@ -120,7 +134,7 @@ export default function Home() {
                   }
                 />
               </td>
-              <td>
+              <td className="w-[180px]">
                 {order.cart_data?.map((cartItem: any, i: any) => {
                   return (
                     <span key={i} className="w-full">
@@ -130,6 +144,7 @@ export default function Home() {
                   );
                 })}
               </td>
+              <td>{moment(order.created_at).format("DD-MM-YYYY")}</td>
               {/* <td>
                 <button
                   className="mbtn"

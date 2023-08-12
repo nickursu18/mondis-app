@@ -6,13 +6,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import moment from "moment";
 import { OrderData } from "../address/action";
-import { Grid } from "@mantine/core";
+import { Button, Grid } from "@mantine/core";
 
 export default function Home() {
   const supabaseUrl: any = "https://pkrvehrepdgvyksotuyg.supabase.co";
   const supabaseKey: any =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrcnZlaHJlcGRndnlrc290dXlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODc5NTQ4NTcsImV4cCI6MjAwMzUzMDg1N30.ZLsSjv5GYf82e2pLwOWrcbSH89jwuLedNdTEeqdQsKE";
   const supabase = createClient(supabaseUrl, supabaseKey);
+  const [loading, setLoading] = useState(false);
   // const router = useRouter();
   // const [nproduct, setnProduct] = useState(0);
   // const [amtproduct, setAmtProduct] = useState(0);
@@ -95,6 +96,18 @@ export default function Home() {
     }
   };
 
+  async function updateStatus(orderSt: any, orderId: any) {
+    setLoading(true);
+    const { data: orders } = await supabase
+      .from("orders")
+      .update({ orderStatus: orderSt })
+      .eq("id", orderId);
+
+    await fetchOrders();
+
+    setLoading(false);
+  }
+
   return (
     <main className="flex flex-col items-center justify-between">
       <link
@@ -148,6 +161,47 @@ export default function Home() {
                         )}
                     </div>
                   </Grid.Col>
+
+                  {orderItem.orderStatus === 8 && (
+                    <>
+                      <Grid.Col span={6}>
+                        <Button
+                          loading={loading}
+                          styles={{
+                            root: {
+                              "&:hover": {
+                                backgroundColor: "#CD76BA",
+                              },
+                            },
+                          }}
+                          type="submit"
+                          size="md"
+                          className="mbtn mt-5 w-full"
+                          onClick={() => updateStatus(7, orderItem.id)}
+                        >
+                          Cere Returul Coletului
+                        </Button>
+                      </Grid.Col>
+                      <Grid.Col span={6}>
+                        <Button
+                          loading={loading}
+                          styles={{
+                            root: {
+                              "&:hover": {
+                                backgroundColor: "#CD76BA",
+                              },
+                            },
+                          }}
+                          type="submit"
+                          size="md"
+                          className="mbtn mt-5 w-full"
+                          onClick={() => updateStatus(6, orderItem.id)}
+                        >
+                          Donează către Mondis
+                        </Button>
+                      </Grid.Col>
+                    </>
+                  )}
                 </Grid>
               </div>
             ))}
