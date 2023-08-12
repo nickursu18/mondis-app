@@ -14,7 +14,10 @@ export default function Home() {
   const [activePage, setPage] = useState(1);
 
   async function getData() {
-    const { data: orders } = await supabase.from("orders").select().order("created_at", {ascending: false});
+    const { data: orders } = await supabase
+      .from("orders")
+      .select()
+      .order("created_at", { ascending: false });
     const amp: any = orders;
     setOrders(amp);
   }
@@ -58,9 +61,7 @@ export default function Home() {
     [activePage, orders, startIndex, endIndex]
   );
 
-
-
-
+  console.log(ordersToShow);
 
   return (
     <main className="flex flex-col items-center justify-between">
@@ -68,17 +69,18 @@ export default function Home() {
         <thead>
           <tr>
             <th>Numărul comenzii</th>
+            <th>creat la</th>
             <th>Numele Clientului</th>
+
+            {/* <th>Email</th>
+            <th>Phone</th> */}
+            <th>Adresa</th>
             <th>Nr. Produse</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>abordare</th>
             <th>Estimarea</th>
             <th>Statutul Coletului</th>
             <th>Validarea</th>
             <th>Gift Card</th>
             <th>Products</th>
-            <th>creat la</th>
             {/* <th>Actions</th> */}
           </tr>
         </thead>
@@ -86,18 +88,35 @@ export default function Home() {
           {ordersToShow.map((order: any, i: any) => (
             <tr key={order.id}>
               <td className="w-[40px]">{order.id}</td>
-              <td className="w-[40px]">{order.address_data.name}</td>
-              <td className="w-[40px]">{order.nproduct}</td>
-              <td className="w-[40px]">{order.address_data?.email || "N/A"}</td>
-              <td className="w-[40px]">{order.address_data?.phone || "N/A"}</td>
-              <td className="w-[150px]">{`${order.address_data?.country ?? ""} ${order.address_data?.city ?? ""} ${order.address_data?.country ?? ""} ${order.address_data?.street ?? ""} ${order.address_data?.building ?? ""} ${order.address_data?.postalCode ?? ""} `}</td>
+              <td className="w-[180px]">
+                {moment(order.created_at).format("DD-MM-YYYY")}
+              </td>
+              <td className="w-[40px]">{`${order.address_data.name ?? ""} ${
+                order.address_data.familyName ?? ""
+              }`}</td>
+
+              {/* <td className="w-[40px]">{order.address_data?.email || "N/A"}</td>
+              <td className="w-[40px]">{order.address_data?.phone || "N/A"}</td> */}
+              <td className="w-[150px]">{`${
+                order.address_data?.country ?? ""
+              } ${order.address_data?.city ?? ""} ${
+                order.address_data?.country ?? ""
+              } ${order.address_data?.street ?? ""} ${
+                order.address_data?.building ?? ""
+              } ${order.address_data?.postalCode ?? ""} ${
+                order.address_data?.email || ""
+              } ${order.address_data?.phone || ""} `}</td>
               <td>{order.amtproduct}</td>
+              <td className="w-[40px]">{order.cart_data.length}</td>
               <td>
                 <Select
                   w={150}
                   onChange={(event) => updateStatus(Number(event), order.id)}
                   data={[
-                    { value: "0", label: "Așteptarea Colectării de Către Curier" },
+                    {
+                      value: "0",
+                      label: "Așteptarea Colectării de Către Curier",
+                    },
                     { value: "1", label: "În Tranzit Spre Mondis" },
                     { value: "2", label: "Estimare Primită" },
                     { value: "3", label: "Estimare Aprobată" },
@@ -124,8 +143,8 @@ export default function Home() {
               </td>
               <td>
                 <Input
-                // miw={20}
-                w={80}
+                  // miw={20}
+                  w={80}
                   className="border-2 border-solid"
                   type="text"
                   defaultValue={order.giftCardCode || ""}
@@ -144,7 +163,7 @@ export default function Home() {
                   );
                 })}
               </td>
-              <td className="w-[180px]">{moment(order.created_at).format("DD-MM-YYYY")}</td>
+
               {/* <td>
                 <button
                   className="mbtn"
