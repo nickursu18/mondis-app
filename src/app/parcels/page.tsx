@@ -109,24 +109,29 @@ export default function Home() {
         <div className="lg:grid lg:grid-cols-2 gap-10">
           <div className="items-start text-left">
             {orders?.map((orderItem: any, i: any) => (
-              <div key={i} className="item2">
-                <div className="flex space-x-4">
-                  <img src="orangetick.svg" />
-                  <span className="prodname w-full">
+              <div key={i} className="item2 grid grid-cols-2 items-center">
+                <div className="prodname flex space-x-4">
+                  <img src="orangetick.svg" className="" />
+                  <p>
                     Coletul {moment(orderItem.created_at).format("MMMM Do")} (
                     {orderItem.cart_data?.length} articole){" "}
-                  </span>
-                  <img
-                    src={orderStatusImage(orderItem.orderStatus)}
-                    className="inline-block"
-                  />
-                  <span className="text-[9px]">
+                  </p>
+                </div>
+
+                <div className="text-[9px] space-x-4 flex justify-end items-center">
+                  <div>
+                    <img
+                      src={orderStatusImage(orderItem.orderStatus)}
+                    />
+                  </div>
+                  <p className="text-right">
                     {orderStatusName(orderItem.orderStatus)}
-                  </span>
+                  </p>
+
                   {orderItem?.giftCardCode && (
-                    <span className="text-[9px]">
+                    <div className="text-[9px]">
                       Code: {orderItem?.giftCardCode}
-                    </span>
+                    </div>
                   )}
                 </div>
               </div>
