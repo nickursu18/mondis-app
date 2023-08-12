@@ -45,7 +45,7 @@ export default function Home() {
     getData();
   }, []);
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 15;
   const startIndex = useMemo(
     () => (activePage - 1) * itemsPerPage,
     [activePage]
