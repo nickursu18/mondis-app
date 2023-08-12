@@ -91,6 +91,9 @@ export default function Home() {
                     { value: "3", label: "Estimare Aprobată" },
                     { value: "4", label: "Contract Digital Semnat" },
                     { value: "5", label: "Gift Card Emis" },
+                    { value: "6", label: "Donat" },
+                    { value: "7", label: "Returnat" },
+                    { value: "8", label: "Nevalidat" },
                   ]}
                   defaultValue={String(order.orderStatus)}
                 />

@@ -63,6 +63,12 @@ export default function Home() {
         return "Contract Digital Semnat";
       case 5:
         return "Gift Card Emis";
+      case 6:
+        return "Donat";
+      case 7:
+        return "Returnat";
+      case 8:
+        return "Nevalidat";
     }
   };
 
@@ -80,9 +86,14 @@ export default function Home() {
         return "DigitalContract.svg";
       case 5:
         return "Gift.svg";
+      case 6:
+        return "Donate.svg";
+      case 7:
+        return "Return.svg";
+      case 8:
+        return "EstimationRejected.svg";
     }
   };
-
 
   return (
     <main className="flex flex-col items-center justify-between">
@@ -129,11 +140,12 @@ export default function Home() {
                         {orderStatusName(orderItem.orderStatus)}
                       </p>
 
-                      {(orderItem?.giftCardCode && orderItem.orderStatus === 5 ) && (
-                        <div className="text-[9px]">
-                          Code: {orderItem?.giftCardCode}
-                        </div>
-                      )}
+                      {orderItem?.giftCardCode &&
+                        orderItem.orderStatus === 5 && (
+                          <div className="text-[9px]">
+                            Code: {orderItem?.giftCardCode}
+                          </div>
+                        )}
                     </div>
                   </Grid.Col>
                 </Grid>
