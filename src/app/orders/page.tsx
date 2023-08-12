@@ -88,8 +88,8 @@ export default function Home() {
               <td className="w-[40px]">{order.id}</td>
               <td className="w-[40px]">{order.address_data.name}</td>
               <td className="w-[40px]">{order.nproduct}</td>
-              <td>{order.address_data?.email || "N/A"}</td>
-              <td>{order.address_data?.phone || "N/A"}</td>
+              <td className="w-[40px]">{order.address_data?.email || "N/A"}</td>
+              <td className="w-[40px]">{order.address_data?.phone || "N/A"}</td>
               <td className="w-[150px]">{`${order.address_data?.country ?? ""} ${order.address_data?.city ?? ""} ${order.address_data?.country ?? ""} ${order.address_data?.street ?? ""} ${order.address_data?.building ?? ""} ${order.address_data?.postalCode ?? ""} `}</td>
               <td>{order.amtproduct}</td>
               <td>
@@ -144,7 +144,7 @@ export default function Home() {
                   );
                 })}
               </td>
-              <td>{moment(order.created_at).format("DD-MM-YYYY")}</td>
+              <td className="w-[180px]">{moment(order.created_at).format("DD-MM-YYYY")}</td>
               {/* <td>
                 <button
                   className="mbtn"
