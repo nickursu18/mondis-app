@@ -123,6 +123,11 @@ export default function Home() {
                   <span className="text-[9px]">
                     {orderStatusName(orderItem.orderStatus)}
                   </span>
+                  {orderItem?.giftCardCode && (
+                    <span className="text-[9px]">
+                      Code: {orderItem?.giftCardCode}
+                    </span>
+                  )}
                 </div>
               </div>
             ))}

@@ -57,11 +57,6 @@ export default function Home() {
     [activePage, orders, startIndex, endIndex]
   );
 
-  useEffect(() => {
-    console.log(startIndex, endIndex, ordersToShow.length);
-
-  }, [activePage])
-
   return (
     <main className="flex flex-col items-center justify-between">
       <table className="table-auto w-full">
@@ -90,11 +85,12 @@ export default function Home() {
                   miw={150}
                   onChange={(event) => updateStatus(Number(event), order.id)}
                   data={[
-                    { value: "0", label: "În Tranzit Spre Mondis" },
-                    { value: "1", label: "Estimare Primită" },
-                    { value: "2", label: "Estimare Aprobată" },
-                    { value: "3", label: "Contract Digital Semnat" },
-                    { value: "4", label: "Gift Card Emis" },
+                    { value: "0", label: "Așteptarea Colectării de Către Curier" },
+                    { value: "1", label: "În Tranzit Spre Mondis" },
+                    { value: "2", label: "Estimare Primită" },
+                    { value: "3", label: "Estimare Aprobată" },
+                    { value: "4", label: "Contract Digital Semnat" },
+                    { value: "5", label: "Gift Card Emis" },
                   ]}
                   defaultValue={String(order.orderStatus)}
                 />
@@ -104,7 +100,7 @@ export default function Home() {
                   className="border-2 border-solid"
                   miw={100}
                   type="text"
-                  value={order.finalEstimate || ""}
+                  defaultValue={order.finalEstimate || ""}
                   onChange={(event) =>
                     updateEstimate(event.target.value, order.id)
                   }
@@ -115,7 +111,7 @@ export default function Home() {
                 miw={100}
                   className="border-2 border-solid"
                   type="text"
-                  value={order.giftCardCode || ""}
+                  defaultValue={order.giftCardCode || ""}
                   onChange={(event) =>
                     updateGiftCard(event.target.value, order.id)
                   }
