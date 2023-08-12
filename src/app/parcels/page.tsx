@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import moment from "moment";
 import { OrderData } from "../address/action";
+import { Grid } from "@mantine/core";
 
 export default function Home() {
   const supabaseUrl: any = "https://pkrvehrepdgvyksotuyg.supabase.co";
@@ -82,7 +83,6 @@ export default function Home() {
     }
   };
 
-  console.log(orders);
 
   return (
     <main className="flex flex-col items-center justify-between">
@@ -109,31 +109,34 @@ export default function Home() {
         <div className="lg:grid lg:grid-cols-2 gap-10">
           <div className="items-start text-left">
             {orders?.map((orderItem: any, i: any) => (
-              <div key={i} className="item2 grid grid-cols-2 items-center">
-                <div className="prodname flex space-x-4">
-                  <img src="orangetick.svg" className="" />
-                  <p>
-                    Coletul {moment(orderItem.created_at).format("MMMM Do")} (
-                    {orderItem.cart_data?.length} articole){" "}
-                  </p>
-                </div>
-
-                <div className="text-[9px] space-x-4 flex justify-end items-center">
-                  <div>
-                    <img
-                      src={orderStatusImage(orderItem.orderStatus)}
-                    />
-                  </div>
-                  <p className="text-right">
-                    {orderStatusName(orderItem.orderStatus)}
-                  </p>
-
-                  {orderItem?.giftCardCode && (
-                    <div className="text-[9px]">
-                      Code: {orderItem?.giftCardCode}
+              <div key={i} className="item2 items-center">
+                <Grid>
+                  <Grid.Col span={7}>
+                    <div className="prodname flex space-x-4">
+                      <img src="orangetick.svg" className="" />
+                      <p>
+                        Coletul {moment(orderItem.created_at).format("MMMM Do")}{" "}
+                        ({orderItem.cart_data?.length} articole){" "}
+                      </p>
                     </div>
-                  )}
-                </div>
+                  </Grid.Col>
+                  <Grid.Col span={5}>
+                    <div className="text-[9px] space-x-4 flex justify-end items-center">
+                      <div>
+                        <img src={orderStatusImage(orderItem.orderStatus)} />
+                      </div>
+                      <p className="text-right">
+                        {orderStatusName(orderItem.orderStatus)}
+                      </p>
+
+                      {(orderItem?.giftCardCode && orderItem.orderStatus === 5 ) && (
+                        <div className="text-[9px]">
+                          Code: {orderItem?.giftCardCode}
+                        </div>
+                      )}
+                    </div>
+                  </Grid.Col>
+                </Grid>
               </div>
             ))}
             {orderData?.length == 0 ? (
