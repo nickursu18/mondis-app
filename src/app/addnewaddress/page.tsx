@@ -6,7 +6,14 @@ import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
 import { useForm, joiResolver } from "@mantine/form";
 import Joi from "joi";
-import { Select, TextInput, Textarea, clsx, createStyles } from "@mantine/core";
+import {
+  Button,
+  Select,
+  TextInput,
+  Textarea,
+  clsx,
+  createStyles,
+} from "@mantine/core";
 import axios from "axios";
 import { fetchCounties, fetchLocalities, fetchStreets } from "./action";
 
@@ -20,21 +27,26 @@ export default function Home() {
   //     : null;
   const [countiesData, setCounties] = useState([]);
   const [locaitesData, setLocalities] = useState([]);
-  const [streetData, setStreet] = useState([]);
+  const [streetData, setStreet] = useState<any>([]);
   const schema = Joi.object({
-    name: Joi.string().min(2).message("Name should have at least 2 letters"),
-    familyName: Joi.string()
+    name: Joi.string()
       .min(2)
-      .message("Name should have at least 2 letters"),
+      .message("Name should have at least 2 letters")
+      .required(),
+    familyName: Joi.string().allow(null, "").optional(),
     email: Joi.string()
       .email({ tlds: { allow: false } })
       .message("Invalid email")
-      .allow(null, ""),
-    phone: Joi.string().optional().allow(null, ""),
+      .required(),
+    phone: Joi.string().required(),
     county: Joi.string().required(),
     locality: Joi.string().required(),
     street: Joi.string().required(),
-    postalCode: Joi.number().required().allow(null, ""),
+    postalCode: Joi.number().required(),
+    building: Joi.string().required(),
+    entrance: Joi.string().required(),
+    floor: Joi.string().required(),
+    apartment: Joi.string().required(),
     additional: Joi.string().optional().allow(null, ""),
   });
   const initialValues = {
@@ -46,6 +58,10 @@ export default function Home() {
     locality: "",
     street: "",
     postalCode: "",
+    building: "",
+    entrance: "",
+    floor: "",
+    apartment: "",
     additional: "",
   };
   const { classes } = inputStyles();
@@ -65,6 +81,10 @@ export default function Home() {
     city: form.values.locality,
     street: form.values.street,
     postalCode: form.values.postalCode,
+    building: form.values.building,
+    entrance: form.values.entrance,
+    floor: form.values.floor,
+    apartment: form.values.apartment,
     additional: form.values.additional,
   };
   function addAddress() {
@@ -132,10 +152,7 @@ export default function Home() {
   const setStreetData = async (county: string, locality: string) => {
     const data = await fetchStreets(county, locality);
     if (data) {
-      const streets = data
-        .map((item: any) => item.street)
-        .filter((item: any) => item !== "");
-      setStreet(streets);
+      setStreet(data);
     }
   };
   useEffect(() => {
@@ -161,6 +178,17 @@ export default function Home() {
       setStreet([]);
     }
   }, [form.values.locality]);
+
+  useEffect(() => {
+    if (form.values.street) {
+      const zipcode = streetData.find(
+        (item: any) => item.street === form.values.street
+      )?.details[0].zipCode;
+      form.setFieldValue("postalCode", zipcode);
+    } else {
+      form.setFieldValue("postalCode", "");
+    }
+  }, [form.values.street]);
 
   const handleSubmit = async (values: typeof initialValues) => {
     addAddress();
@@ -268,7 +296,9 @@ export default function Home() {
                   <b className="labl">Strada</b>
                   <br />
                   <Select
-                    data={streetData}
+                    data={streetData
+                      .map((item: any) => item.street)
+                      .filter((item: any) => item !== "")}
                     classNames={classes}
                     searchable
                     clearable
@@ -286,6 +316,43 @@ export default function Home() {
                   />
                 </div>
               </div>
+              <div className="flex cols-2 gap-5 w-full">
+                <div>
+                  <b className="labl">Blocul</b>
+                  <br />
+                  <TextInput
+                    classNames={classes}
+                    {...form.getInputProps("building")}
+                  />
+                </div>
+                <div>
+                  <b className="labl">Scara
+</b>
+                  <br />
+                  <TextInput
+                    classNames={classes}
+                    {...form.getInputProps("entrance")}
+                  />
+                </div>
+              </div>
+              <div className="flex cols-2 gap-5 w-full">
+                <div>
+                  <b className="labl"> Etaj</b>
+                  <br />
+                  <TextInput
+                    classNames={classes}
+                    {...form.getInputProps("floor")}
+                  />
+                </div>
+                <div>
+                  <b className="labl">Apartament</b>
+                  <br />
+                  <TextInput  
+                    classNames={classes}
+                    {...form.getInputProps("apartment")}
+                  />
+                </div>
+              </div>
               <div>
                 <b className="labl">Informații suplimentare</b>
                 <br />
@@ -294,9 +361,21 @@ export default function Home() {
                   {...form.getInputProps("additional")}
                 />
               </div>
-              <button type="submit" className="mbtn mt-5 w-full">
+              <Button
+                disabled={!form.isValid()}
+                styles={{
+                  root: {
+                    "&:hover": {
+                      backgroundColor: "#CD76BA",
+                    },
+                  },
+                }}
+                type="submit"
+                size="md"
+                className="mbtn mt-5 w-full"
+              >
                 Salvează adresă
-              </button>
+              </Button>
             </div>
             <div className="lg:twoSec mt-10 lg:mt-0">
               <div

@@ -12,6 +12,10 @@ type AddressData = {
   city: string;
   street: string;
   postalCode: string;
+  building: string;
+    entrance:string;
+    floor:string;
+    apartment: string;
   additional: string;
 };
 
@@ -64,7 +68,7 @@ export const generateCourierOrder = async (orderId:number,address: AddressData,p
   const res = await loginFanCourier()
   if(res){
   const awbNumber = await generateInternalAWB(orderId,address);
-  return await createCourierOrder(awbNumber,pickup);
+  return await createCourierOrder(awbNumber,address,pickup);
 }
 };
 
@@ -105,6 +109,11 @@ const generateInternalAWB = async (orderId:number,address: AddressData) => {
                 locality: address.city,
                 street: address.street,
                 zipCode: address.postalCode,
+                building:address.building,
+                entrance:address.entrance,
+                floor:address.floor,
+                apartment:address.apartment
+              
               },
             },
           },
@@ -119,7 +128,7 @@ const generateInternalAWB = async (orderId:number,address: AddressData) => {
     });
 };
 
-const createCourierOrder = async ( awbNumber: number,pickup:{
+const createCourierOrder = async ( awbNumber: number,address: AddressData,pickup:{
   date: string,
   firstPickup: string,
   secondPickup: string,
@@ -153,6 +162,21 @@ const createCourierOrder = async ( awbNumber: number,pickup:{
           observations: "test",
         },
         clientId: process.env.fancourier_clientid,
+        recipient: {
+          name: address.name,
+          phone: address.phone,
+          email: address.email,
+          address: {
+            county: address.country,
+            locality: address.city,
+            street: address.street,
+            zipCode: address.postalCode,
+            building:address.building,
+            entrance:address.entrance,
+            floor:address.floor,
+            apartment:address.apartment
+          },
+        },
       },
     })
     .then((res) => {
