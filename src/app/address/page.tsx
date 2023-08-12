@@ -81,6 +81,7 @@ export default function Home() {
           localStorage.getItem("orderId") + "," + data[0].id
         );
         setLoading(false);
+        localStorage.removeItem("items")
         router.push("/parcels");
       } else alert("Failed, Order did not placed");
     } else alert("Failed, Order did not placed on courier service");
