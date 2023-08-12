@@ -69,9 +69,10 @@ export default function Home() {
         <thead>
           <tr>
             <th>Numărul comenzii</th>
+
             <th>creat la</th>
             <th>Numele Clientului</th>
-
+            
             {/* <th>Email</th>
             <th>Phone</th> */}
             <th>Adresa</th>
@@ -94,7 +95,6 @@ export default function Home() {
               <td className="w-[40px]">{`${order.address_data.name ?? ""} ${
                 order.address_data.familyName ?? ""
               }`}</td>
-
               {/* <td className="w-[40px]">{order.address_data?.email || "N/A"}</td>
               <td className="w-[40px]">{order.address_data?.phone || "N/A"}</td> */}
               <td className="w-[150px]">{`${
@@ -106,8 +106,8 @@ export default function Home() {
               } ${order.address_data?.postalCode ?? ""} ${
                 order.address_data?.email || ""
               } ${order.address_data?.phone || ""} `}</td>
-              <td>{order.amtproduct}</td>
               <td className="w-[40px]">{order.cart_data.length}</td>
+              <td>{order.amtproduct}</td>
               <td>
                 <Select
                   w={150}
