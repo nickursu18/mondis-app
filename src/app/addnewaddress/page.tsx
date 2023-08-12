@@ -240,7 +240,7 @@ export default function Home() {
               <br />
               <div className="flex cols-2 gap-5 w-full">
                 <div>
-                  <b className="labl">Țara</b>
+                  <b className="labl">Județ</b>
                   <br />
                   <Select
                     data={countiesData}

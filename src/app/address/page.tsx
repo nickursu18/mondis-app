@@ -236,7 +236,7 @@ export default function Home() {
                     style={{ width: "100%" }}
                   >
                     <div className="item">
-                      <div className="flex items-center">
+                      <div className="flex flex-col text-center space-y-4 md:flex-row md:space-y-0 md:text-left  items-center">
                         <img
                           alt="trash"
                           onClick={() => deleteAddress(addressItem.id)}
