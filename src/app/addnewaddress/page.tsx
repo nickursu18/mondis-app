@@ -44,9 +44,9 @@ export default function Home() {
     street: Joi.string().required(),
     postalCode: Joi.number().required(),
     building: Joi.string().required(),
-    entrance: Joi.string().required(),
-    floor: Joi.string().required(),
-    apartment: Joi.string().required(),
+    entrance: Joi.string().optional().allow(null, ""),
+    floor: Joi.string().optional().allow(null, ""),
+    apartment: Joi.string().optional().allow(null, ""),
     additional: Joi.string().optional().allow(null, ""),
   });
   const initialValues = {
@@ -202,6 +202,8 @@ export default function Home() {
     router.push("/address");
   };
 
+  console.log(form.errors)
+
   return (
     <main className="flex flex-col items-center justify-between">
       <link
@@ -323,7 +325,7 @@ export default function Home() {
               </div>
               <div className="flex cols-2 gap-5 w-full">
                 <div>
-                  <b className="labl">Blocul</b>
+                  <b className="labl">Blocul/Numarul</b>
                   <br />
                   <TextInput
                     classNames={classes}
@@ -331,8 +333,7 @@ export default function Home() {
                   />
                 </div>
                 <div>
-                  <b className="labl">Scara
-</b>
+                  <b className="labl">Scara</b>
                   <br />
                   <TextInput
                     classNames={classes}
@@ -352,7 +353,7 @@ export default function Home() {
                 <div>
                   <b className="labl">Apartament</b>
                   <br />
-                  <TextInput  
+                  <TextInput
                     classNames={classes}
                     {...form.getInputProps("apartment")}
                   />

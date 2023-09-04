@@ -3,6 +3,7 @@ import { useMemo, useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { Input, Pagination } from "@mantine/core";
 import { Select } from "@mantine/core";
+import moment from "moment";
 
 export default function Home() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -13,7 +14,10 @@ export default function Home() {
   const [activePage, setPage] = useState(1);
 
   async function getData() {
-    const { data: orders } = await supabase.from("orders").select();
+    const { data: orders } = await supabase
+      .from("orders")
+      .select()
+      .order("created_at", { ascending: false });
     const amp: any = orders;
     setOrders(amp);
   }
@@ -44,7 +48,7 @@ export default function Home() {
     getData();
   }, []);
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 15;
   const startIndex = useMemo(
     () => (activePage - 1) * itemsPerPage,
     [activePage]
@@ -57,40 +61,70 @@ export default function Home() {
     [activePage, orders, startIndex, endIndex]
   );
 
+  console.log(ordersToShow);
+
   return (
     <main className="flex flex-col items-center justify-between">
       <table className="table-auto w-full">
         <thead>
           <tr>
             <th>Numărul comenzii</th>
+
+            <th>creat la</th>
             <th>Numele Clientului</th>
+            
+            {/* <th>Email</th>
+            <th>Phone</th> */}
+            <th>Adresa</th>
             <th>Nr. Produse</th>
             <th>Estimarea</th>
             <th>Statutul Coletului</th>
             <th>Validarea</th>
             <th>Gift Card</th>
-            <th className="w-full">Products</th>
+            <th>Products</th>
             {/* <th>Actions</th> */}
           </tr>
         </thead>
         <tbody>
           {ordersToShow.map((order: any, i: any) => (
             <tr key={order.id}>
-              <td>{order.id}</td>
-              <td>{order.address_data.name}</td>
-              <td>{order.nproduct}</td>
+              <td className="w-[40px]">{order.id}</td>
+              <td className="w-[180px]">
+                {moment(order.created_at).format("DD-MM-YYYY")}
+              </td>
+              <td className="w-[40px]">{`${order.address_data.name ?? ""} ${
+                order.address_data.familyName ?? ""
+              }`}</td>
+              {/* <td className="w-[40px]">{order.address_data?.email || "N/A"}</td>
+              <td className="w-[40px]">{order.address_data?.phone || "N/A"}</td> */}
+              <td className="w-[150px]">{`${
+                order.address_data?.country ?? ""
+              } ${order.address_data?.city ?? ""} ${
+                order.address_data?.country ?? ""
+              } ${order.address_data?.street ?? ""} ${
+                order.address_data?.building ?? ""
+              } ${order.address_data?.postalCode ?? ""} ${
+                order.address_data?.email || ""
+              } ${order.address_data?.phone || ""} `}</td>
+              <td className="w-[40px]">{order.cart_data.length}</td>
               <td>{order.amtproduct}</td>
               <td>
                 <Select
-                  miw={150}
+                  w={150}
                   onChange={(event) => updateStatus(Number(event), order.id)}
                   data={[
-                    { value: "0", label: "Așteptarea Colectării de Către Curier" },
+                    {
+                      value: "0",
+                      label: "Așteptarea Colectării de Către Curier",
+                    },
                     { value: "1", label: "În Tranzit Spre Mondis" },
                     { value: "2", label: "Estimare Primită" },
                     { value: "3", label: "Estimare Aprobată" },
                     { value: "4", label: "Contract Digital Semnat" },
                     { value: "5", label: "Gift Card Emis" },
+                    { value: "6", label: "Donat" },
+                    { value: "7", label: "Returnat" },
+                    { value: "8", label: "Nevalidat" },
                   ]}
                   defaultValue={String(order.orderStatus)}
                 />
@@ -98,7 +132,8 @@ export default function Home() {
               <td>
                 <Input
                   className="border-2 border-solid"
-                  miw={100}
+                  // miw={"20px"}
+                  w={80}
                   type="text"
                   defaultValue={order.finalEstimate || ""}
                   onChange={(event) =>
@@ -108,7 +143,8 @@ export default function Home() {
               </td>
               <td>
                 <Input
-                miw={100}
+                  // miw={20}
+                  w={80}
                   className="border-2 border-solid"
                   type="text"
                   defaultValue={order.giftCardCode || ""}
@@ -117,7 +153,7 @@ export default function Home() {
                   }
                 />
               </td>
-              <td>
+              <td className="w-[180px]">
                 {order.cart_data?.map((cartItem: any, i: any) => {
                   return (
                     <span key={i} className="w-full">
@@ -127,6 +163,7 @@ export default function Home() {
                   );
                 })}
               </td>
+
               {/* <td>
                 <button
                   className="mbtn"

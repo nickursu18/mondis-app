@@ -6,12 +6,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import moment from "moment";
 import { OrderData } from "../address/action";
+import { Button, Grid } from "@mantine/core";
 
 export default function Home() {
   const supabaseUrl: any = "https://pkrvehrepdgvyksotuyg.supabase.co";
   const supabaseKey: any =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrcnZlaHJlcGRndnlrc290dXlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODc5NTQ4NTcsImV4cCI6MjAwMzUzMDg1N30.ZLsSjv5GYf82e2pLwOWrcbSH89jwuLedNdTEeqdQsKE";
   const supabase = createClient(supabaseUrl, supabaseKey);
+  const [loading, setLoading] = useState(false);
   // const router = useRouter();
   // const [nproduct, setnProduct] = useState(0);
   // const [amtproduct, setAmtProduct] = useState(0);
@@ -62,6 +64,12 @@ export default function Home() {
         return "Contract Digital Semnat";
       case 5:
         return "Gift Card Emis";
+      case 6:
+        return "Donat";
+      case 7:
+        return "Returnat";
+      case 8:
+        return "Nevalidat";
     }
   };
 
@@ -79,10 +87,26 @@ export default function Home() {
         return "DigitalContract.svg";
       case 5:
         return "Gift.svg";
+      case 6:
+        return "Donate.svg";
+      case 7:
+        return "Return.svg";
+      case 8:
+        return "EstimationRejected.svg";
     }
   };
 
-  console.log(orders);
+  async function updateStatus(orderSt: any, orderId: any) {
+    setLoading(true);
+    const { data: orders } = await supabase
+      .from("orders")
+      .update({ orderStatus: orderSt })
+      .eq("id", orderId);
+
+    await fetchOrders();
+
+    setLoading(false);
+  }
 
   return (
     <main className="flex flex-col items-center justify-between">
@@ -109,26 +133,76 @@ export default function Home() {
         <div className="lg:grid lg:grid-cols-2 gap-10">
           <div className="items-start text-left">
             {orders?.map((orderItem: any, i: any) => (
-              <div key={i} className="item2">
-                <div className="flex space-x-4">
-                  <img src="orangetick.svg" />
-                  <span className="prodname w-full">
-                    Coletul {moment(orderItem.created_at).format("MMMM Do")} (
-                    {orderItem.cart_data?.length} articole){" "}
-                  </span>
-                  <img
-                    src={orderStatusImage(orderItem.orderStatus)}
-                    className="inline-block"
-                  />
-                  <span className="text-[9px]">
-                    {orderStatusName(orderItem.orderStatus)}
-                  </span>
-                  {orderItem?.giftCardCode && (
-                    <span className="text-[9px]">
-                      Code: {orderItem?.giftCardCode}
-                    </span>
+              <div key={i} className="item2 items-center">
+                <Grid>
+                  <Grid.Col span={7}>
+                    <div className="prodname flex space-x-4">
+                      <img src="orangetick.svg" className="" />
+                      <p>
+                        Coletul {moment(orderItem.created_at).format("MMMM Do")}{" "}
+                        ({orderItem.cart_data?.length} articole){" "}
+                      </p>
+                    </div>
+                  </Grid.Col>
+                  <Grid.Col span={5}>
+                    <div className="text-[9px] space-x-4 flex justify-end items-center">
+                      <div>
+                        <img src={orderStatusImage(orderItem.orderStatus)} />
+                      </div>
+                      <p className="text-right">
+                        {orderStatusName(orderItem.orderStatus)}
+                      </p>
+
+                      {orderItem?.giftCardCode &&
+                        orderItem.orderStatus === 5 && (
+                          <div className="text-[9px]">
+                            Code: {orderItem?.giftCardCode}
+                          </div>
+                        )}
+                    </div>
+                  </Grid.Col>
+
+                  {orderItem.orderStatus === 8 && (
+                    <>
+                      <Grid.Col span={6}>
+                        <Button
+                          loading={loading}
+                          styles={{
+                            root: {
+                              "&:hover": {
+                                backgroundColor: "#CD76BA",
+                              },
+                            },
+                          }}
+                          type="submit"
+                          size="md"
+                          className="mbtn mt-5 w-full"
+                          onClick={() => updateStatus(7, orderItem.id)}
+                        >
+                          Cere Returul Coletului
+                        </Button>
+                      </Grid.Col>
+                      <Grid.Col span={6}>
+                        <Button
+                          loading={loading}
+                          styles={{
+                            root: {
+                              "&:hover": {
+                                backgroundColor: "#CD76BA",
+                              },
+                            },
+                          }}
+                          type="submit"
+                          size="md"
+                          className="mbtn mt-5 w-full"
+                          onClick={() => updateStatus(6, orderItem.id)}
+                        >
+                          Donează către Mondis
+                        </Button>
+                      </Grid.Col>
+                    </>
                   )}
-                </div>
+                </Grid>
               </div>
             ))}
             {orderData?.length == 0 ? (
