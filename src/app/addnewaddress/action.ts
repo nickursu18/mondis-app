@@ -34,17 +34,17 @@ export const fetchLocalities = async (county:string)=>{
     return false;
   });
 }
-export const fetchStreets = async (county:string,locality:string)=>{
+export const fetchStreets = async (county:string,locality:string,page:number)=>{
   return await axios
   .request({
     url: "https://api.fancourier.ro/reports/streets",
     params:{
-      county,locality
+      county,locality,page
     }
   })
   .then((res: any) => {
     // console.log(res.data.data)
-   return res.data.data
+   return res.data
   })
   .catch((err) => {
     console.log(err)

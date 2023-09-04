@@ -150,9 +150,16 @@ export default function Home() {
     }
   };
   const setStreetData = async (county: string, locality: string) => {
-    const data = await fetchStreets(county, locality);
-    if (data) {
-      setStreet(data);
+    let page = 1
+    let count = 1
+    const arr:any = []
+    for(page;page<=count;page++){
+      const {total,data} = await fetchStreets(county, locality,page);
+      count = Number((total/100).toFixed())
+      arr.push(...data)
+    }
+    if (arr?.length!==0) {
+      setStreet(arr);
     }
   };
   useEffect(() => {
@@ -182,7 +189,7 @@ export default function Home() {
   useEffect(() => {
     if (form.values.street) {
       const zipcode = streetData.find(
-        (item: any) => item.street === form.values.street
+        (item: any) =>  form.values.street.includes(item.street) && form.values.street.includes(item.type)
       )?.details[0].zipCode;
       form.setFieldValue("postalCode", zipcode);
     } else {
@@ -296,9 +303,7 @@ export default function Home() {
                   <b className="labl">Strada</b>
                   <br />
                   <Select
-                    data={streetData
-                      .map((item: any) => item.street)
-                      .filter((item: any) => item !== "")}
+                    data={streetData.filter((item: any) => item.street !== "").map((item: any) => `${item.street} (${item.type})`)}
                     classNames={classes}
                     searchable
                     clearable
