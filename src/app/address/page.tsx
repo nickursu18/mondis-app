@@ -81,7 +81,7 @@ export default function Home() {
           localStorage.getItem("orderId") + "," + data[0].id
         );
         setLoading(false);
-        localStorage.removeItem("items")
+        localStorage.removeItem("items");
         router.push("/parcels");
       } else alert("Failed, Order did not placed");
     } else alert("Failed, Order did not placed on courier service");
@@ -208,7 +208,9 @@ export default function Home() {
             rel="stylesheet"
           />
           <div className="header flex flex-col sm:flex-row items-center">
-            <img src="logo.png" className="logo" />
+            <a href="https://mondis.ro">
+              <img src="logo.png" className="logo" />
+            </a>
             <div className="flex flex-col space-y-4 sm:space-y-0 items-center sm:flex-row mt-4 sm:mt-[0]">
               <a href="/" className="menu-item sm:p-[30px]">
                 Primiți o ofertă
@@ -216,7 +218,7 @@ export default function Home() {
               <a href="/parcels" className="menu-item sm:p-[30px]">
                 Coletele Dvs.
               </a>
-              <a href="#" className="menu-item sm:p-[30px]">
+              <a href="https://mondis.ro" className="menu-item sm:p-[30px]">
                 Înapoi spre magazin
               </a>
             </div>
