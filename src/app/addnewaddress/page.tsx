@@ -150,15 +150,15 @@ export default function Home() {
     }
   };
   const setStreetData = async (county: string, locality: string) => {
-    let page = 1
-    let count = 1
-    const arr:any = []
-    for(page;page<=count;page++){
-      const {total,data} = await fetchStreets(county, locality,page);
-      count = Number((total/100).toFixed())
-      arr.push(...data)
+    let page = 1;
+    let count = 1;
+    const arr: any = [];
+    for (page; page <= count; page++) {
+      const { total, data } = await fetchStreets(county, locality, page);
+      count = Number((total / 100).toFixed());
+      arr.push(...data);
     }
-    if (arr?.length!==0) {
+    if (arr?.length !== 0) {
       setStreet(arr);
     }
   };
@@ -189,7 +189,9 @@ export default function Home() {
   useEffect(() => {
     if (form.values.street) {
       const zipcode = streetData.find(
-        (item: any) =>  form.values.street.includes(item.street) && form.values.street.includes(item.type)
+        (item: any) =>
+          form.values.street.includes(item.street) &&
+          form.values.street.includes(item.type)
       )?.details[0].zipCode;
       form.setFieldValue("postalCode", zipcode);
     } else {
@@ -202,7 +204,7 @@ export default function Home() {
     router.push("/address");
   };
 
-  console.log(form.errors)
+  console.log(form.errors);
 
   return (
     <main className="flex flex-col items-center justify-between">
@@ -211,7 +213,9 @@ export default function Home() {
         rel="stylesheet"
       />
       <div className="header flex flex-col sm:flex-row items-center">
-        <img src="logo.png" className="logo" />
+        <a href="https://mondis.ro">
+          <img src="logo.png" className="logo" />
+        </a>
         <div className="flex flex-col space-y-4 sm:space-y-0 items-center sm:flex-row mt-4 sm:mt-[0]">
           <a href="/" className="menu-item sm:p-[30px]">
             Primiți o ofertă
@@ -219,7 +223,7 @@ export default function Home() {
           <a href="/parcels" className="menu-item sm:p-[30px]">
             Coletele Dvs.
           </a>
-          <a href="#" className="menu-item sm:p-[30px]">
+          <a href="https://mondis.ro" className="menu-item sm:p-[30px]">
             Înapoi spre magazin
           </a>
         </div>
@@ -305,7 +309,9 @@ export default function Home() {
                   <b className="labl">Strada</b>
                   <br />
                   <Select
-                    data={streetData.filter((item: any) => item.street !== "").map((item: any) => `${item.street} (${item.type})`)}
+                    data={streetData
+                      .filter((item: any) => item.street !== "")
+                      .map((item: any) => `${item.street} (${item.type})`)}
                     classNames={classes}
                     searchable
                     clearable
