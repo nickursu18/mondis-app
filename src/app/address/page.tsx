@@ -200,7 +200,7 @@ export default function Home() {
   }, [form.values.firstPickup]);
 
   
-  console.log(new Date(),new Date().toDateString())
+  console.log(new Date(),new Date().toDateString(),form.values.date,form.values.date.toString())
 
   return (
     <>
