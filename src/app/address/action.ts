@@ -133,6 +133,7 @@ const createCourierOrder = async ( awbNumber: number,address: AddressData,pickup
   firstPickup: string,
   secondPickup: string,
 }) => {
+  console.log(awbNumber)
   return await axios
     .request({
       method: "POST",
