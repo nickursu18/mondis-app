@@ -1,6 +1,14 @@
 "use server";
 import axios from "axios";
-import moment from "moment";
+import moment from "moment-timezone";
+
+const httpClient = axios.create({
+  baseURL:'https://api.fancourier.ro',
+  headers:{
+    date:moment.tz(new Date(),'Europe/Bucharest').format('MMMM DD HH:mm:ss.SS [GMT]Z').toString(),
+    'Content-Type':'application/json'
+  }
+})
 
 type AddressData = {
   id: string;
@@ -44,21 +52,23 @@ export type OrderData = {
 };
 
 export const loginFanCourier = async ()=>{
-  return await axios
+  return await httpClient
     .request({
       method: "POST",
-      url: "https://api.fancourier.ro/login",
+      url: "login",
       params: {
         username: process.env.fancourier_username,
         password: process.env.fancourier_password,
       },
     })
     .then((res: any) => {
-      axios.defaults.headers.common.Authorization = "Bearer " + res.data.data.token;
+      httpClient.defaults.headers.common.Authorization = "Bearer " + res.data.data.token;
       return true
     })
     .catch((err) => {return false});
 }
+
+
 
 export const generateCourierOrder = async (orderId:number,address: AddressData,pickup:{
   date: string,
@@ -73,10 +83,10 @@ export const generateCourierOrder = async (orderId:number,address: AddressData,p
 };
 
 const generateInternalAWB = async (orderId:number,address: AddressData) => {
-  return await axios
+  return await httpClient
     .request({
       method: "POST",
-      url: "https://api.fancourier.ro/intern-awb",
+      url: "intern-awb",
       data: {
         clientId: process.env.fancourier_clientid,
         shipments: [
@@ -133,10 +143,10 @@ const createCourierOrder = async ( awbNumber: number,address: AddressData,pickup
   firstPickup: string,
   secondPickup: string,
 }) => {
-  return await axios
+  return await httpClient
     .request({
       method: "POST",
-      url: "https://api.fancourier.ro/order",
+      url: "order",
       data: {
         info: {
           awbnumber: awbNumber, // it must be filled in with the AWB number if you want it to be printed by the courier, when picking up the shipment
