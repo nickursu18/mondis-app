@@ -199,6 +199,9 @@ export default function Home() {
     }
   }, [form.values.firstPickup]);
 
+  
+  console.log(new Date(),new Date().toDateString())
+
   return (
     <>
       {cartData.length !== 0 && (
