@@ -163,7 +163,7 @@ const createCourierOrder = async ( awbNumber: number,address: AddressData,pickup
             height: 10,
           },
           orderType: "Standard", // mandatory; Standard or Express Loco
-          pickupDate: moment(pickup.date).format("YYYY-MM-DD"), // the date when the courier will show up to pick up the shipment(s.
+          pickupDate: moment(pickup.date).add(1,'day').format("YYYY-MM-DD"), // the date when the courier will show up to pick up the shipment(s.
           pickupHours: {
             // the interval cannot be below 2 hours
             first: pickup.firstPickup, // minimum pickup time

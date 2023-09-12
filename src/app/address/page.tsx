@@ -200,7 +200,7 @@ export default function Home() {
   }, [form.values.firstPickup]);
 
   
-  console.log(new Date(),new Date().toDateString(),form.values.date,form.values.date.toString())
+  console.log(moment(form.values.date).format("YYYY-MM-DD"))
 
   return (
     <>
