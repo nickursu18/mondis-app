@@ -39,7 +39,7 @@ export default function Home() {
     setSubCategory(amp);
   }
   getSubCategory();
-  
+
   if (categorys.length == 0) {
     getData();
   }
@@ -50,7 +50,7 @@ export default function Home() {
         rel="stylesheet"
       />
       <div className="header flex flex-col sm:flex-row items-center">
-      <a href="https://mondis.ro">
+        <a href="https://mondis.ro" target="_parent">
           <img src="logo.png" className="logo" />
         </a>
         <div className="flex flex-col space-y-4 sm:space-y-0 items-center sm:flex-row mt-4 sm:mt-[0]">

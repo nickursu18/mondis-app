@@ -18,7 +18,10 @@ export default function Home() {
     subcatname: atob("" + searchParams.get("subcatname")),
   };
   function addToCart() {
-    localStorage.setItem('items', localStorage.getItem('items')  +","+JSON.stringify(productS));
+    localStorage.setItem(
+      "items",
+      localStorage.getItem("items") + "," + JSON.stringify(productS)
+    );
     router.push("/addproducts");
   }
   //console.log(JSON.parse("["+localStorage.getItem('items')?.replace("null,","")+"]"));
@@ -29,7 +32,7 @@ export default function Home() {
         rel="stylesheet"
       />
       <div className="header flex flex-col sm:flex-row items-center">
-      <a href="https://mondis.ro">
+        <a href="https://mondis.ro" target="_parent">
           <img src="logo.png" className="logo" />
         </a>
         <div className="flex flex-col space-y-4 sm:space-y-0 items-center sm:flex-row mt-4 sm:mt-[0]">
