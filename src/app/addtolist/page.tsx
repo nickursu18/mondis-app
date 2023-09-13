@@ -42,7 +42,11 @@ export default function Home() {
           <a href="/parcels" className="menu-item sm:p-[30px]">
             Coletele Dvs.
           </a>
-          <a href="https://mondis.ro" className="menu-item sm:p-[30px]">
+          <a
+            href="https://mondis.ro"
+            className="menu-item sm:p-[30px]"
+            target="_parent"
+          >
             Înapoi spre magazin
           </a>
         </div>
