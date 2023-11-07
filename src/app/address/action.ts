@@ -110,6 +110,20 @@ const generateInternalAWB = async (orderId:number,address: AddressData) => {
               costCenter: "DEP IT",
               // options: ["X"],
             },
+            sender: {
+              name: "GARABO GLOBAL SRL",
+              phone: "",
+              contactPerson: "GARABO GLOBAL SRL",
+              secondaryPhone : "",
+              email: "",
+              address: {
+                county: "Romania",
+                locality: "Medgidia",
+                street: "Sos Constantei Nr 1E",
+                zipCode: "905600",
+                streetNo: "1"
+              },
+            },
             recipient: {
               name: address.name,
               phone: address.phone,
@@ -172,7 +186,7 @@ const createCourierOrder = async ( awbNumber: number,address: AddressData,pickup
           observations: "test",
         },
         clientId: process.env.fancourier_clientid,
-        recipient: {
+        sender: {
           name: address.name,
           phone: address.phone,
           email: address.email,
