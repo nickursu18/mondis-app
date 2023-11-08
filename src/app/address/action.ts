@@ -110,6 +110,20 @@ const generateInternalAWB = async (orderId:number,address: AddressData) => {
               costCenter: "DEP IT",
               // options: ["X"],
             },
+            sender: {
+              name: "GARABO GLOBAL SRL",
+              phone: "",
+              contactPerson: "GARABO GLOBAL SRL",
+              secondaryPhone : "",
+              email: "",
+              address: {
+                county: "Romania",
+                locality: "Medgidia",
+                street: "Sos Constantei Nr 1E",
+                zipCode: "905600",
+                streetNo: "1"
+              },
+            },
             recipient: {
               name: address.name,
               phone: address.phone,
@@ -143,6 +157,7 @@ const createCourierOrder = async ( awbNumber: number,address: AddressData,pickup
   firstPickup: string,
   secondPickup: string,
 }) => {
+console.log("================>", address)
   return await httpClient
     .request({
       method: "POST",
@@ -189,8 +204,11 @@ const createCourierOrder = async ( awbNumber: number,address: AddressData,pickup
         },
       },
     })
+    
     .then((res) => {
+      
       return res.data['data']['id']
+      
     })
     .catch((e) => {
       console.log(e);
