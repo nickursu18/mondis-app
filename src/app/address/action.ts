@@ -187,7 +187,7 @@ console.log("================>", address)
           observations: "test",
         },
         clientId: process.env.fancourier_clientid,
-        recipient: {
+        sender: {
           name: address.name,
           phone: address.phone,
           email: address.email,
