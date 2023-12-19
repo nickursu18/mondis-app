@@ -107,8 +107,8 @@ const generateInternalAWB = async (orderId: number, address: AddressData) => {
               },
               weight: 1,
               payment: "GARABO GLOBAL SRL Cernavoda",
-              returnPayment: "recipient",
-              observation: "",
+              returnPayment: null,
+              observation: "Observation",
               content: `Order no. ${orderId}`,
               dimensions: {
                 length: 1,
