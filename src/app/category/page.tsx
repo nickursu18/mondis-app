@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { createClient } from "@supabase/supabase-js";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+
 export default function Home() {
   const [categorys, setCategory] = useState<any[]>([]);
   const [searchString, setSearchString] = useState("");
@@ -11,11 +12,12 @@ export default function Home() {
   const supabaseUrl: any = "https://pkrvehrepdgvyksotuyg.supabase.co";
   const supabaseKey: any =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrcnZlaHJlcGRndnlrc290dXlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODc5NTQ4NTcsImV4cCI6MjAwMzUzMDg1N30.ZLsSjv5GYf82e2pLwOWrcbSH89jwuLedNdTEeqdQsKE";
+
   const supabase = createClient(supabaseUrl, supabaseKey);
-  const router = useRouter();
   const searchParams = useSearchParams();
   let estim = 0;
   const catm: any = searchParams.get("categories");
+
   async function getData() {
     const toS = catm.substring(0, catm.length - 1);
     const strArray: any = toS.split(",");
@@ -27,22 +29,25 @@ export default function Home() {
       .from("category")
       .select()
       .in("id", intArray);
-    console.log(intArray);
+
     const amp: any = category;
 
     setCategory(amp);
   }
+
   async function getSubCategory() {
     const { data: category } = await supabase.from("subcategory").select();
     const amp: any = category;
 
     setSubCategory(amp);
   }
+
   getSubCategory();
 
   if (categorys.length == 0) {
     getData();
   }
+
   return (
     <main className="flex flex-col items-center justify-between">
       <link
@@ -63,8 +68,7 @@ export default function Home() {
           <a
             href="https://mondis.ro"
             className="menu-item sm:p-[30px]"
-            target="_parent"
-          >
+            target="_parent">
             Înapoi spre magazin
           </a>
         </div>
@@ -80,15 +84,13 @@ export default function Home() {
               className="texts"
               onChange={(event) => {
                 setSearchString(event.target.value);
-                console.log(searchString);
               }}
               value={searchString}
               placeholder="Căutați marca"
             />
             <div
               className="items-start text-left amp2"
-              style={{ width: "70%" }}
-            >
+              style={{ width: "70%" }}>
               <h1 className="secHead2">Subcategoria</h1>
               <ul>
                 {subCategory
@@ -131,8 +133,7 @@ export default function Home() {
                             "&subcatname=" +
                             encodeURIComponent(btoa("" + subCat.subcat_name))
                           }
-                          className="href"
-                        >
+                          className="href">
                           {subCat.subcat_name}
                         </Link>
                       </li>

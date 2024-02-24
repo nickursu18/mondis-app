@@ -1,8 +1,6 @@
 "use client";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
-import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import moment from "moment";
 import { OrderData } from "../address/action";
@@ -14,10 +12,8 @@ export default function Home() {
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrcnZlaHJlcGRndnlrc290dXlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODc5NTQ4NTcsImV4cCI6MjAwMzUzMDg1N30.ZLsSjv5GYf82e2pLwOWrcbSH89jwuLedNdTEeqdQsKE";
   const supabase = createClient(supabaseUrl, supabaseKey);
   const [loading, setLoading] = useState(false);
-  // const router = useRouter();
-  // const [nproduct, setnProduct] = useState(0);
-  // const [amtproduct, setAmtProduct] = useState(0);
   let orderData: any;
+
   if (typeof window !== "undefined") {
     if (localStorage.getItem("orderId")) {
       orderData =
@@ -39,16 +35,13 @@ export default function Home() {
 
     setOrders(data);
   };
+
   useEffect(() => {
     fetchOrders();
   }, []);
 
   const a = 100;
   const b = 200;
-  const searchParams = useSearchParams();
-  // const a = 100;
-  // const b = 200;
-  // const searchParams = useSearchParams();
 
   const orderStatusName = (orderStatus: number) => {
     switch (orderStatus) {
@@ -98,6 +91,7 @@ export default function Home() {
 
   async function updateStatus(orderSt: any, orderId: any) {
     setLoading(true);
+
     const { data: orders } = await supabase
       .from("orders")
       .update({ orderStatus: orderSt })
@@ -128,8 +122,7 @@ export default function Home() {
           <a
             href="https://mondis.ro"
             className="menu-item sm:p-[30px]"
-            target="_parent"
-          >
+            target="_parent">
             Înapoi spre magazin
           </a>
         </div>
@@ -183,8 +176,7 @@ export default function Home() {
                           type="submit"
                           size="md"
                           className="mbtn mt-5 w-full"
-                          onClick={() => updateStatus(7, orderItem.id)}
-                        >
+                          onClick={() => updateStatus(7, orderItem.id)}>
                           Cere Returul Coletului
                         </Button>
                       </Grid.Col>
@@ -201,8 +193,7 @@ export default function Home() {
                           type="submit"
                           size="md"
                           className="mbtn mt-5 w-full"
-                          onClick={() => updateStatus(6, orderItem.id)}
-                        >
+                          onClick={() => updateStatus(6, orderItem.id)}>
                           Donează către Mondis
                         </Button>
                       </Grid.Col>

@@ -159,13 +159,9 @@ const generateInternalAWB = async (orderId: number, address: AddressData) => {
       },
     })
     .then((res) => {
-      console.log(res.data.response[0]);
-
       return res.data.response[0].awbNumber;
     })
     .catch((err) => {
-      console.error(err.errors);
-
       return null;
     });
 };

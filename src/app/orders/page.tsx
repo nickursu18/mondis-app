@@ -29,6 +29,7 @@ export default function Home() {
       .eq("id", orderId);
     alert("Status Updated Successfully!");
   }
+
   async function updateEstimate(finalEst: any, orderId: any) {
     const { data: orders } = await supabase
       .from("orders")
@@ -36,12 +37,12 @@ export default function Home() {
       .eq("id", orderId);
     //alert("Estimation Updated Successfully!");
   }
+
   async function updateGiftCard(giftCard: any, orderId: any) {
     const { data: orders } = await supabase
       .from("orders")
       .update({ giftCardCode: giftCard })
       .eq("id", orderId);
-    //alert("Estimation Updated Successfully!");
   }
 
   useEffect(() => {
@@ -61,20 +62,14 @@ export default function Home() {
     [activePage, orders, startIndex, endIndex]
   );
 
-  console.log(ordersToShow);
-
   return (
     <main className="flex flex-col items-center justify-between">
       <table className="table-auto w-full">
         <thead>
           <tr>
             <th>Numărul comenzii</th>
-
             <th>creat la</th>
             <th>Numele Clientului</th>
-            
-            {/* <th>Email</th>
-            <th>Phone</th> */}
             <th>Adresa</th>
             <th>Nr. Produse</th>
             <th>Estimarea</th>
@@ -82,7 +77,6 @@ export default function Home() {
             <th>Validarea</th>
             <th>Gift Card</th>
             <th>Products</th>
-            {/* <th>Actions</th> */}
           </tr>
         </thead>
         <tbody>
@@ -92,11 +86,11 @@ export default function Home() {
               <td className="w-[180px]">
                 {moment(order.created_at).format("DD-MM-YYYY")}
               </td>
-              <td className="w-[40px]">{`${order.address_data.name ?? ""} ${
-                order.address_data.familyName ?? ""
-              }`}</td>
-              {/* <td className="w-[40px]">{order.address_data?.email || "N/A"}</td>
-              <td className="w-[40px]">{order.address_data?.phone || "N/A"}</td> */}
+              <td className="w-[40px]">
+                {`${order.address_data.name ?? ""} ${
+                  order.address_data.familyName ?? ""
+                }`}
+              </td>
               <td className="w-[150px]">{`${
                 order.address_data?.country ?? ""
               } ${order.address_data?.city ?? ""} ${
@@ -132,7 +126,6 @@ export default function Home() {
               <td>
                 <Input
                   className="border-2 border-solid"
-                  // miw={"20px"}
                   w={80}
                   type="text"
                   defaultValue={order.finalEstimate || ""}
@@ -143,7 +136,6 @@ export default function Home() {
               </td>
               <td>
                 <Input
-                  // miw={20}
                   w={80}
                   className="border-2 border-solid"
                   type="text"
@@ -163,15 +155,6 @@ export default function Home() {
                   );
                 })}
               </td>
-
-              {/* <td>
-                <button
-                  className="mbtn"
-                  onClick={() => alert("Updated Successfully!")}
-                >
-                  Save
-                </button>
-              </td> */}
             </tr>
           ))}
         </tbody>

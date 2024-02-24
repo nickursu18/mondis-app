@@ -1,16 +1,12 @@
 "use client";
-import Image from "next/image";
-import { useEffect, useRef, useState, useTransition } from "react";
-import axios from "axios";
-
+import { useEffect, useRef, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { start } from "repl";
 import { generateCourierOrder } from "./action";
-import { ActionIcon, Button, Center, Modal, Select } from "@mantine/core";
+import { Button, Center, Modal, Select } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { DateInput, TimeInput } from "@mantine/dates";
+import { DateInput } from "@mantine/dates";
 import moment from "moment";
 import { joiResolver, useForm } from "@mantine/form";
 import Joi from "joi";
@@ -22,16 +18,13 @@ export default function Home() {
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrcnZlaHJlcGRndnlrc290dXlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODc5NTQ4NTcsImV4cCI6MjAwMzUzMDg1N30.ZLsSjv5GYf82e2pLwOWrcbSH89jwuLedNdTEeqdQsKE";
   const supabase = createClient(supabaseUrl, supabaseKey);
   const router = useRouter();
-  const [nproduct, setnProduct] = useState(0);
-  const [amtproduct, setAmtProduct] = useState(0);
   const [loading, setLoading] = useState(false);
   const a = 100;
   const b = 200;
   const [opened, { open, close }] = useDisclosure(false);
-  const searchParams = useSearchParams();
   let estimateTotal = 0;
   let totProds = 0;
-  // let addressData: any = [];
+
   const [cartData, setCartData] = useState(
     typeof window !== "undefined" && localStorage.getItem("items")
       ? JSON.parse(
@@ -39,6 +32,7 @@ export default function Home() {
         )
       : []
   );
+
   const [addressData, setAddressData] = useState<any[]>(
     typeof window !== "undefined" && localStorage.getItem("address")
       ? JSON.parse(
@@ -57,12 +51,14 @@ export default function Home() {
     }
   ) {
     setLoading(true);
+
     const orderId = Math.random();
     const courierOrderId = await generateCourierOrder(
       orderId,
       address_data,
       pickup
     );
+
     if (courierOrderId) {
       const { data }: any = await supabase
         .from("orders")
@@ -75,11 +71,13 @@ export default function Home() {
           fancourier_orderId: courierOrderId,
         })
         .select();
+
       if (data) {
-        await localStorage.setItem(
+        localStorage.setItem(
           "orderId",
           localStorage.getItem("orderId") + "," + data[0].id
         );
+
         setLoading(false);
         localStorage.removeItem("items");
         router.push("/parcels");
@@ -99,6 +97,7 @@ export default function Home() {
     firstPickup: Joi.string().required(),
     secondPickup: Joi.string().required(),
   });
+
   const initialValues = {
     date: "",
     firstPickup: "",
@@ -121,13 +120,11 @@ export default function Home() {
       (item: any) => item.id !== id
     );
 
-    var commaSeparatedString = updatedArray
+    const commaSeparatedString = updatedArray
       .map((obj) => {
         return JSON.stringify(obj);
       })
       .join(", ");
-
-    console.log(commaSeparatedString);
 
     setCartData(updatedArray);
     if (updatedArray?.length === 0) {
@@ -135,7 +132,6 @@ export default function Home() {
       return;
     }
     localStorage.setItem("items", "null," + commaSeparatedString);
-    // localStorage.setItem("items", JSON.stringify(updatedArray));
   };
 
   const deleteAddress = (id: string) => {
@@ -153,16 +149,14 @@ export default function Home() {
       })
       .join(", ");
 
-    console.log(commaSeparatedString);
-
     setAddressData(updatedArray);
     if (updatedArray?.length === 0) {
       localStorage.setItem("address", "null");
       return;
     }
     localStorage.setItem("address", "null," + commaSeparatedString);
-    // localStorage.setItem("items", JSON.stringify(updatedArray));
   };
+
   const weekTime = [
     "09:00",
     "10:00",
@@ -176,30 +170,31 @@ export default function Home() {
     "18:00",
     "19:00",
   ];
+
   const offWeekTime = ["09:00", "10:00", "11:00", "12:00", "13:00"];
+
   const fstPU = () => {
     if (moment(form.values.date).day() === 6) {
       return offWeekTime;
     }
     return weekTime;
   };
+
   const SndPU = () => {
     const fPUIndex = weekTime.findIndex(
       (item) => item === form.values.firstPickup
     );
     if (moment(form.values.date).day() === 6) {
-      console.log(offWeekTime.slice(fPUIndex + 2));
       return offWeekTime.slice(fPUIndex + 2);
     }
     return weekTime.slice(fPUIndex + 2);
   };
+
   useEffect(() => {
     if (form.values.firstPickup) {
       form.setFieldValue("secondPickup", "");
     }
   }, [form.values.firstPickup]);
-
-  console.log(moment(form.values.date).format("YYYY-MM-DD"));
 
   return (
     <>
@@ -223,8 +218,7 @@ export default function Home() {
               <a
                 href="https://mondis.ro"
                 className="menu-item sm:p-[30px]"
-                target="_parent"
-              >
+                target="_parent">
                 Înapoi spre magazin
               </a>
             </div>
@@ -245,8 +239,7 @@ export default function Home() {
                   <div
                     key={i}
                     className="threeSec9 items-start text-left msg"
-                    style={{ width: "100%" }}
-                  >
+                    style={{ width: "100%" }}>
                     <div className="item">
                       <div className="flex flex-col text-center space-y-4 md:flex-row md:space-y-0 md:text-left  items-center">
                         <img
@@ -268,13 +261,11 @@ export default function Home() {
                           centered
                           keepMounted={true}
                           size={600}
-                          title="Data si ora preluarii comenzii"
-                        >
+                          title="Data si ora preluarii comenzii">
                           <form
                             onSubmit={form.onSubmit((values) => {
                               createOrder(addressItem, cartData, values);
-                            })}
-                          >
+                            })}>
                             <div className="h-[300px] space-y-5">
                               <DateInput
                                 valueFormat="DD-MMM-YYYY"
@@ -317,8 +308,7 @@ export default function Home() {
                                   }}
                                   className="mbtn"
                                   size="md"
-                                  type="submit"
-                                >
+                                  type="submit">
                                   Plaseaza comanda
                                 </Button>
                               </Center>
@@ -340,8 +330,7 @@ export default function Home() {
               <div className="lg:twoSec mt-10 lg:mt-0">
                 <div
                   className="items-start text-left amp2"
-                  style={{ width: "100%" }}
-                >
+                  style={{ width: "100%" }}>
                   <h1 className="secHead2">Produse de vânzare</h1>
                   <br />
                   {cartData?.map((cartItem: any, i: any) => {
