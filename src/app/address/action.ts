@@ -86,6 +86,11 @@ export const generateCourierOrder = async (
   const res = await loginFanCourier();
   if (res) {
     const awbNumber = await generateInternalAWB(orderId, address);
+
+    console.log("========================================");
+    console.log(awbNumber);
+    console.log("========================================");
+
     return await createCourierOrder(awbNumber, address, pickup);
   }
 };
@@ -106,9 +111,10 @@ const generateInternalAWB = async (orderId: number, address: AddressData) => {
                 envelopes: 0,
               },
               weight: 1,
-              payment: "GARABO GLOBAL SRL Cernavoda",
+              payment: "sender", // ERROR
+              refund: null,
               returnPayment: null,
-              observation: "Observation",
+              observation: "FRAGIl",
               content: `Order no. ${orderId}`,
               dimensions: {
                 length: 1,
@@ -116,17 +122,18 @@ const generateInternalAWB = async (orderId: number, address: AddressData) => {
                 width: 3,
               },
               costCenter: "DEP IT",
-              // options: ["X"],
+              options: [],
             },
+
             sender: {
               name: "GARABO GLOBAL SRL",
-              phone: "",
+              phone: "0723456789", // ERROR - REQUIRE
               contactPerson: "GARABO GLOBAL SRL",
               secondaryPhone: "",
-              email: "",
+              email: "sender123@gmail.com",
               address: {
-                county: "Romania",
-                locality: "Medgidia",
+                county: "Ilfov", // ERROR - value must include in this link: https://api.fancourier.ro/reports/counties
+                locality: "Buftea", // ERROR - value must include in this link: https://api.fancourier.ro/reports/counties
                 street: "Sos Constantei Nr 1E",
                 zipCode: "905600",
                 streetNo: "1",
@@ -140,8 +147,8 @@ const generateInternalAWB = async (orderId: number, address: AddressData) => {
                 county: address.country,
                 locality: address.city,
                 street: address.street,
+                streetNo: address.building,
                 zipCode: address.postalCode,
-                building: address.building,
                 entrance: address.entrance,
                 floor: address.floor,
                 apartment: address.apartment,
@@ -152,9 +159,13 @@ const generateInternalAWB = async (orderId: number, address: AddressData) => {
       },
     })
     .then((res) => {
+      console.log(res.data.response[0]);
+
       return res.data.response[0].awbNumber;
     })
     .catch((err) => {
+      console.error(err.errors);
+
       return null;
     });
 };
@@ -168,7 +179,6 @@ const createCourierOrder = async (
     secondPickup: string;
   }
 ) => {
-  console.log("================>", address);
   return await httpClient
     .request({
       method: "POST",
