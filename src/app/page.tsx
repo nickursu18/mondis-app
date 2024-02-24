@@ -1,6 +1,6 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
+
 export default function Home() {
   return (
     <main className="flex flex-col items-center justify-between">
@@ -19,7 +19,10 @@ export default function Home() {
           <a href="/parcels" className="menu-item sm:p-[30px]">
             Coletele Dvs.
           </a>
-          <a href="https://mondis.ro" className="menu-item sm:p-[30px]" target="_parent">
+          <a
+            href="https://mondis.ro"
+            className="menu-item sm:p-[30px]"
+            target="_parent">
             Înapoi spre magazin
           </a>
         </div>
@@ -35,8 +38,7 @@ export default function Home() {
             <div className="lg:flex lg:colmm">
               <Link
                 href="/brand?gender=women"
-                className="items-center text-center msg"
-              >
+                className="items-center text-center msg">
                 <img
                   src="women.svg"
                   style={{ height: "100px", width: "140px" }}
@@ -46,8 +48,7 @@ export default function Home() {
               </Link>
               <Link
                 href="/brand?gender=men"
-                className="items-center text-center msg"
-              >
+                className="items-center text-center msg">
                 <img
                   src="men.svg"
                   style={{ height: "100px", width: "140px" }}
@@ -57,8 +58,7 @@ export default function Home() {
               </Link>
               <Link
                 href="/brand?gender=kids"
-                className="items-center text-center msg"
-              >
+                className="items-center text-center msg">
                 <img
                   src="kids.svg"
                   style={{ height: "100px", width: "140px" }}

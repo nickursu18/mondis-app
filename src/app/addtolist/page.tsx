@@ -1,12 +1,10 @@
 "use client";
 import { nanoid } from "nanoid";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 export default function Home() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const catm: any = searchParams.get("categories");
 
   const productS = {
     id: nanoid(),
@@ -17,6 +15,7 @@ export default function Home() {
     estimate: atob("" + searchParams.get("estimate")),
     subcatname: atob("" + searchParams.get("subcatname")),
   };
+
   function addToCart() {
     localStorage.setItem(
       "items",
@@ -24,7 +23,7 @@ export default function Home() {
     );
     router.push("/addproducts");
   }
-  //console.log(JSON.parse("["+localStorage.getItem('items')?.replace("null,","")+"]"));
+
   return (
     <main className="flex flex-col items-center justify-between">
       <link
@@ -45,8 +44,7 @@ export default function Home() {
           <a
             href="https://mondis.ro"
             className="menu-item sm:p-[30px]"
-            target="_parent"
-          >
+            target="_parent">
             Înapoi spre magazin
           </a>
         </div>
@@ -67,16 +65,14 @@ export default function Home() {
               href="/addproducts"
               onClick={() => addToCart()}
               className="mbtn"
-              style={{ width: "40%" }}
-            >
+              style={{ width: "40%" }}>
               Adăugați în listă
             </Link>
           </div>
           <div className="lg:twoSec mt-10 lg:mt-0">
             <div
               className="items-start text-left amp2"
-              style={{ width: "100%" }}
-            >
+              style={{ width: "100%" }}>
               <h1 className="secHead2">Produse de vânzare</h1>
               <br />
               <img src="bbn.svg" />

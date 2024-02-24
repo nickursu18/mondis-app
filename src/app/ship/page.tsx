@@ -1,9 +1,7 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
-import { exit } from "process";
+
 export default function Home() {
-  // localStorage.removeItem('items');
   let estimateTotal = 0;
   const cartData =
     typeof window !== "undefined"
@@ -32,8 +30,7 @@ export default function Home() {
           <a
             href="https://mondis.ro"
             className="menu-item sm:p-[30px]"
-            target="_parent"
-          >
+            target="_parent">
             Înapoi spre magazin
           </a>
         </div>
@@ -53,8 +50,7 @@ export default function Home() {
           <div className="twoSec">
             <div
               className="items-start text-left amp2"
-              style={{ width: "100%" }}
-            >
+              style={{ width: "100%" }}>
               <h1 className="secHead2">Produse de vânzare</h1>
               <br />
               {cartData?.map((cartItem: any, i: any) => {

@@ -119,8 +119,6 @@ export default function Home() {
       })
       .join(", ");
 
-    console.log(commaSeparatedString);
-
     setCartData(updatedArray);
     if (updatedArray?.length === 0) {
       localStorage.setItem("items", "null");
@@ -226,8 +224,7 @@ export default function Home() {
           <a
             href="https://mondis.ro"
             className="menu-item sm:p-[30px]"
-            target="_parent"
-          >
+            target="_parent">
             Înapoi spre magazin
           </a>
         </div>
@@ -388,16 +385,14 @@ export default function Home() {
                 }}
                 type="submit"
                 size="md"
-                className="mbtn mt-5 w-full"
-              >
+                className="mbtn mt-5 w-full">
                 Salvează adresă
               </Button>
             </div>
             <div className="lg:twoSec mt-10 lg:mt-0">
               <div
                 className="items-start text-left amp2"
-                style={{ width: "100%" }}
-              >
+                style={{ width: "100%" }}>
                 <h1 className="secHead2">Produse de vânzare</h1>
                 <br />
                 {cartData?.map((cartItem: any, i: any) => {

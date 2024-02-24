@@ -1,9 +1,9 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { createClient } from "@supabase/supabase-js";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+
 export default function Home() {
   const [searchString, setSearchString] = useState("");
   const [brands, setBrands] = useState<any[]>([]);
@@ -11,10 +11,9 @@ export default function Home() {
   const supabaseKey: any =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrcnZlaHJlcGRndnlrc290dXlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODc5NTQ4NTcsImV4cCI6MjAwMzUzMDg1N30.ZLsSjv5GYf82e2pLwOWrcbSH89jwuLedNdTEeqdQsKE";
   const supabase = createClient(supabaseUrl, supabaseKey);
-  const router = useRouter();
   const searchParams = useSearchParams();
-
   const search = searchParams.get("gender");
+
   async function getData() {
     const { data: brands } = await supabase
       .from("brands")
@@ -23,9 +22,11 @@ export default function Home() {
     const amp: any = brands;
     setBrands(amp);
   }
+
   if (brands.length == 0) {
     getData();
   }
+
   return (
     <main className="flex flex-col items-center justify-between">
       <link
@@ -46,8 +47,7 @@ export default function Home() {
           <a
             href="https://mondis.ro"
             className="menu-item sm:p-[30px]"
-            target="_parent"
-          >
+            target="_parent">
             Înapoi spre magazin
           </a>
         </div>
@@ -65,7 +65,6 @@ export default function Home() {
               className="texts"
               onChange={(event) => {
                 setSearchString(event.target.value);
-                console.log(searchString);
               }}
               value={searchString}
               placeholder="Căutați marca"
@@ -73,8 +72,7 @@ export default function Home() {
             <div className="lg:flex colmm2 mt-5">
               <div
                 className="items-start text-left msg"
-                style={{ width: "70%" }}
-              >
+                style={{ width: "70%" }}>
                 <h1 className="secHead2">Cele mai bune vânzări</h1>
                 <ul>
                   {brands
@@ -86,8 +84,7 @@ export default function Home() {
                     .map((brand: any, i: any) => (
                       <li
                         style={i > 10 ? { display: "none" } : {}}
-                        key={brand.id}
-                      >
+                        key={brand.id}>
                         <Link
                           className="brandLink"
                           href={
@@ -99,8 +96,7 @@ export default function Home() {
                             encodeURIComponent(brand.brand) +
                             "&categories=" +
                             encodeURIComponent(brand.cat_id)
-                          }
-                        >
+                          }>
                           {brand.brand}
                         </Link>
                       </li>
@@ -110,8 +106,7 @@ export default function Home() {
               </div>
               <div
                 className="items-start text-left msg"
-                style={{ width: "100%" }}
-              >
+                style={{ width: "100%" }}>
                 <div className="threeSec2 mt-5">
                   <h1 className="secHead3">
                     Acceptăm pentru vânzări peste 100 de mărci.

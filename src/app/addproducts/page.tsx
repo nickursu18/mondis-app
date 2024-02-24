@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -33,15 +32,12 @@ export default function Home() {
       })
       .join(", ");
 
-    console.log(commaSeparatedString);
-
     setCartData(updatedArray);
     if (updatedArray?.length === 0) {
       localStorage.setItem("items", "null");
       return;
     }
     localStorage.setItem("items", "null," + commaSeparatedString);
-    // localStorage.setItem("items", JSON.stringify(updatedArray));
   };
 
   useEffect(() => {
@@ -72,8 +68,7 @@ export default function Home() {
               <a
                 href="https://mondis.ro"
                 className="menu-item sm:p-[30px]"
-                target="_parent"
-              >
+                target="_parent">
                 Înapoi spre magazin
               </a>
             </div>
@@ -94,8 +89,7 @@ export default function Home() {
                   <Link
                     href="/address"
                     className="mbtn"
-                    style={{ width: "48%" }}
-                  >
+                    style={{ width: "48%" }}>
                     Pasul următor{" "}
                   </Link>
                 </div>
@@ -103,8 +97,7 @@ export default function Home() {
               <div className="lg:twoSec mt-10 lg:mt-0">
                 <div
                   className="items-start text-left amp2"
-                  style={{ width: "100%" }}
-                >
+                  style={{ width: "100%" }}>
                   <h1 className="secHead2">Produse de vânzare</h1>
                   <br />
                   {cartData?.map((cartItem: any, i: any) => {
