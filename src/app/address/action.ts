@@ -106,52 +106,65 @@ const generateInternalAWB = async (orderId: number, address: AddressData) => {
           {
             info: {
               service: "Standard",
+              bank: "",
+              bankAccount: "",
               packages: {
                 parcel: 1,
-                envelopes: 0,
+                envelope: 0,
               },
-              weight: 1,
-              payment: "sender", // ERROR
-              refund: null,
-              returnPayment: null,
-              observation: "FRAGIl",
-              content: `Order no. ${orderId}`,
+              weight: 12,
+              cod: 0,
+              declaredValue: 0,
+              payment: "sender",
+              refund: "",
+              returnPayment: "recipient",
+              observation: "",
+              content: "",
               dimensions: {
-                length: 1,
-                height: 2,
-                width: 3,
+                length: "45",
+                height: "25",
+                width: "20",
               },
-              costCenter: "DEP IT",
-              options: [],
+              costCenter: "cost center",
+              // options: ["X"],
             },
-
             sender: {
-              name: "GARABO GLOBAL SRL",
-              phone: "0723456789", // ERROR - REQUIRE
-              contactPerson: "GARABO GLOBAL SRL",
+              name: "Client Garabo",
+              phone: "0769001001",
+              contactPerson: "",
               secondaryPhone: "",
-              email: "sender123@gmail.com",
+              email: "",
               address: {
-                county: "Ilfov", // ERROR - value must include in this link: https://api.fancourier.ro/reports/counties
-                locality: "Buftea", // ERROR - value must include in this link: https://api.fancourier.ro/reports/counties
-                street: "Sos Constantei Nr 1E",
-                zipCode: "905600",
-                streetNo: "1",
+                county: "Bucuresti",
+                locality: "Bucuresti",
+                zipCode: "052331",
+                building: "",
+                entrance: "",
+                floor: "",
+                street: "Imasului",
+                streetNo: "57",
+                apartment: "",
+                dropOffLocation: "",
               },
             },
             recipient: {
               name: address.name,
+              contactPerson: `${address.familyName} ${address.name}`,
               phone: address.phone,
+              secondaryPhone: "",
               email: address.email,
               address: {
-                county: address.country,
                 locality: address.city,
+                county: address.country,
+                agency: "Bucharest",
                 street: address.street,
                 streetNo: address.building,
                 zipCode: address.postalCode,
+                building: null,
                 entrance: address.entrance,
                 floor: address.floor,
                 apartment: address.apartment,
+                country: "Romania",
               },
             },
           },
@@ -159,9 +172,13 @@ const generateInternalAWB = async (orderId: number, address: AddressData) => {
       },
     })
     .then((res) => {
+      console.log(res.data.response[0]);
+
       return res.data.response[0].awbNumber;
     })
     .catch((err) => {
+      console.log(err);
+
       return null;
     });
 };
